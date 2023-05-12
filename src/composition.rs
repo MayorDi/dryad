@@ -8,9 +8,13 @@ pub struct Color {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Chemical {
     pub water: f32,
+    pub metals: f32,
+    
+// ======== organic ========
+
+    pub glucose: f32,
     pub nitrates: f32,
     pub nitrites: f32,
-    pub metals: f32
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -22,10 +26,11 @@ pub struct Physical {
 impl Default for Chemical {
     fn default() -> Self {
         Self {
-            water: 250.0,      
-            nitrates: 60.0,    
-            nitrites: 10.0,    
-            metals: 200.0       
+            water: 250.0,    
+            nitrates: 60.0,
+            nitrites: 10.0,
+            metals: 200.0,
+            glucose: 0.0,
         }
     }
 }

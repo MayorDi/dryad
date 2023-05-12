@@ -21,3 +21,4 @@ glium           = { path = "../libs/glium",                 version = "0.32.1"  
 glutin          = { path = "../libs/glutin/glutin",         version = "0.30.7"  }
 nalgebra        = { path = "../libs/nalgebra",              version = "0.32.2"  }
 # num-traits      = { path = "../libs/num-traits",            version = "0.2.15"  }
+md5             = { path = "../libs/md5",                   version = "0.7.0"   }

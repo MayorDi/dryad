@@ -1,7 +1,7 @@
-use crate::{block::Block, life::Cell};
+use crate::{block::Block, cell::Cell, composition::Physical};
 
 pub enum Segment {
-    Air,
+    Air(Physical),
     Dirt(Block),
     Cell(Cell)
 }
