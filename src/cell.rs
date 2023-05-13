@@ -1,11 +1,12 @@
 use nalgebra::Vector2;
+use rand::Rng;
 
-use crate::{composition::*, genome::Genome};
+use crate::{composition::*, genome::*};
 
 /// `Cell` основная рабочая единица в которой и происходят все процессы.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Cell {
-    pub hash: md5::Digest,
+    pub id: usize,
 
     pub position: Vector2<usize>,
     pub chemical: Chemical,
@@ -24,7 +25,7 @@ pub struct Cell {
 /// * `Producer` - тип, что создаёт новую особь.
 /// * `Consumer` - тип, что выступает в качестве корней, 
 /// единственный тип, обеспечивающий обмен между почвой и остальным организмом.
-#[derive(Debug, Default, Clone, Copy, PartialEq)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum TypeCell {
     Photosynthetic,
     Conductor,
@@ -36,6 +37,15 @@ pub enum TypeCell {
 
 impl Default for Cell {
     fn default() -> Self {
-        todo!()
+        Self {
+            id: rand::thread_rng().gen_range(0..1000000),
+
+            position: Vector2::new(0, 0),
+            chemical: Chemical::default(),
+            physical: Physical::default(),
+            type_cell: TypeCell::default(),
+            children: [0; 4],
+            genome: Genome([Gene::default(); COUNT_GENES])
+        }
     }
 }
