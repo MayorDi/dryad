@@ -29,6 +29,26 @@ pub struct Physical {
     pub color: Color
 }
 
+impl Color {
+    pub fn new(r: f32, g: f32, b: f32, a: f32) -> Self {
+        Self {
+            r,
+            g,
+            b,
+            a
+        }
+    }
+
+    pub fn from_byte(red: u8, green: u8, blue: u8, alpha: u8) -> Self {
+        Self {
+            r: red as f32 / 255.0,
+            g: green as f32 / 255.0,
+            b: blue as f32 / 255.0,
+            a: alpha as f32 / 255.0,
+        }
+    }
+}
+
 impl Default for Physical {
     fn default() -> Self {
         Self {
