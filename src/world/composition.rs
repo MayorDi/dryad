@@ -1,15 +1,16 @@
 //! `composition` - модуль хранит основное описания составных особенностей сегментов мира.
 
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
 pub struct Color {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8
+    pub r: f32,
+    pub g: f32,
+    pub b: f32,
+    pub a: f32
 }
 
 /// `Chemical` определяет основной химический состав сегмента мира. <br>
 /// В полях нет определённых единиц исчисления.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
 pub struct Chemical {
     pub water: f32,
     pub metals: f32,
@@ -24,27 +25,15 @@ pub struct Chemical {
 /// `Physical` определяет физические особенности сегмента мира.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Physical {
-    pub light: u8,
+    pub light: f32,
     pub color: Color
-}
-
-impl Default for Chemical {
-    fn default() -> Self {
-        Self {
-            water: 250.0,    
-            nitrates: 60.0,
-            nitrites: 10.0,
-            metals: 200.0,
-            glucose: 0.0,
-        }
-    }
 }
 
 impl Default for Physical {
     fn default() -> Self {
         Self {
-            light: 0,
-            color: Color { r: 146, g: 105, b: 95 }
+            light: 1.0,
+            color: Color { r: 0.0, g: 0.0, b: 0.0, a: 0.0 }
         }
     }
 }

@@ -4,7 +4,7 @@ use rand::Rng;
 use super::{Genome, Physical, Chemical, Gene, COUNT_GENES};
 
 /// `Cell` основная рабочая единица в которой и происходят все процессы.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Cell {
     pub id: usize,
 
