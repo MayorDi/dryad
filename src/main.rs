@@ -1,1 +1,1 @@
-fn main() {}
+fn main() {nannou::app(dryad::app::init).update(dryad::app::update).run();}

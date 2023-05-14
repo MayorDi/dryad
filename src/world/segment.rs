@@ -1,4 +1,4 @@
-use crate::{block::Block, cell::Cell, composition::Physical};
+use super::{ Physical, Block, Cell };
 
 /// `Segment` является основой построения мира, осуществляя разделение сегментов на типы.
 #[derive(Debug, Clone, PartialEq)]

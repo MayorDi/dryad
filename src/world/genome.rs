@@ -1,4 +1,4 @@
-use crate::cell::TypeCell;
+use super::TypeCell;
 
 pub const COUNT_GENES: usize = 40;
 

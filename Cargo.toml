@@ -3,7 +3,7 @@ name            = "dryad"
 description     = "A model that stimulates the evolution and development of trees."
 version         = "0.0.1"
 edition         = "2021"
-authors         = ["Mayorov Dmitriy<MayorDi@yandex.ru>"]
+authors         = ["Dmitriy Mayorov<MayorDi@yandex.ru>"]
 license         = "Apache-2.0"
 readme          = "README.md"
 include         = ["./src/**", "./README.md", "./LICENSE-APACHE"]
@@ -13,12 +13,8 @@ repository      = "https://github.com/MayorDi/dryad"
 homepage        = "https://github.com/MayorDi/dryad"
 
 [dependencies]
+nannou_egui     = { path = "../libs/nannou/nannou_egui",    version = "0.5.0"   }
+nannou          = { path = "../libs/nannou/nannou",         version = "0.18.1"  }
 rand            = { path = "../libs/rand",                  version = "0.9.0"   }
-eframe          = { path = "../libs/egui/crates/eframe",    version = "0.21.3"  }
 log             = { path = "../libs/log",                   version = "0.4.17"  }
-# gl              = { path = "../libs/gl/gl",               version = "0.14.0"  }
-glium           = { path = "../libs/glium",                 version = "0.32.1"  }
-glutin          = { path = "../libs/glutin/glutin",         version = "0.30.7"  }
 nalgebra        = { path = "../libs/nalgebra",              version = "0.32.2"  }
-# num-traits      = { path = "../libs/num-traits",            version = "0.2.15"  }
-# md5             = { path = "../libs/md5",                   version = "0.7.0"   }
