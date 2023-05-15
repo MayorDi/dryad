@@ -22,7 +22,7 @@ pub fn init(app: &App) -> Model {
         .new_window()
         .view(render)
         .raw_event(raw_event)
-        .fullscreen()
+        //.fullscreen()
         .build()
         .unwrap();
 

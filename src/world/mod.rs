@@ -11,7 +11,7 @@ pub use cell::*;
 pub use genome::*;
 pub use composition::*;
 
-pub const SIZE_WORLD: [usize; 2] = [255, 32];
+pub const SIZE_WORLD: [usize; 2] = [64, 32];
 pub const COUNT_SEGMENTS: usize = SIZE_WORLD[0] * SIZE_WORLD[1];
 
 type Segments = Vec<Segment>;

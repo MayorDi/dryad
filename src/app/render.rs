@@ -14,23 +14,33 @@ pub fn render(app: &App, model: &Model, frame: Frame) {
         0x12 as f32 / 0xFF as f32, 
         0x15 as f32 / 0xFF as f32));
 
+    
     for i in 0..model.world.segments.len() {
+        let sqrt = draw.quad();
+        let mut points = vec![];
         let (x, y) = get_pos(i, SIZE_WORLD[0]);
-        let rect = draw.rect()
-            .x_y(x as f32 * SIZE_RECT, y as f32 * SIZE_RECT)
-            .w_h(SIZE_RECT, SIZE_RECT);
+        
+        points.push(pt2(x as f32 * SIZE_RECT, y as f32 * SIZE_RECT));
+        points.push(pt2(x as f32 * SIZE_RECT, (y as f32 * SIZE_RECT) + SIZE_RECT));
+        points.push(pt2((x as f32 * SIZE_RECT) + SIZE_RECT, (y as f32 * SIZE_RECT) + SIZE_RECT));
+        points.push(pt2((x as f32 * SIZE_RECT) + SIZE_RECT, y as f32 * SIZE_RECT));
 
         match model.world.segments[i] {
             Segment::Air(_) => {
-                rect.color(rgb::Srgba::new(SKYBLUE.0, SKYBLUE.1, SKYBLUE.2, 1.0));
+                sqrt.color(rgb::Srgba::new(SKYBLUE.0, SKYBLUE.1, SKYBLUE.2, 1.0))
+                    .points(points[0], points[1], points[2], points[3]);
             },
+
             Segment::Cell(cell) => {
                 let Color { r, g, b, a } = cell.physical.color;
-                rect.color(rgb::Srgba::new(r, g, b, a));
+                sqrt.color(rgb::Srgba::new(r, g, b, a))
+                    .points(points[0], points[1], points[2], points[3]);
             },
+
             Segment::Dirt(block) => {
                 let Color { r, g, b, a } = block.physical.color;
-                rect.color(rgb::Srgba::new(r, g, b, a));
+                sqrt.color(rgb::Srgba::new(r, g, b, a))
+                    .points(points[0], points[1], points[2], points[3]);
             }
         }
     }
