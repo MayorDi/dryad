@@ -4,15 +4,17 @@ mod cell;
 mod genome;
 mod composition;
 
-pub use block::*;
 use nalgebra::Vector2;
+use rand::Rng;
+
+pub const SIZE_WORLD: [usize; 2] = [256, 32];
+pub const COUNT_SEGMENTS: usize = SIZE_WORLD[0] * SIZE_WORLD[1];
+
+pub use block::*;
 pub use segment::*;
 pub use cell::*;
 pub use genome::*;
 pub use composition::*;
-
-pub const SIZE_WORLD: [usize; 2] = [64, 32];
-pub const COUNT_SEGMENTS: usize = SIZE_WORLD[0] * SIZE_WORLD[1];
 
 type Segments = Vec<Segment>;
 
@@ -34,7 +36,7 @@ impl World {
                 dirt.position = Vector2::new(x, y);
 
                 dirt.chemical.metals = 200.0;
-                dirt.chemical.water = 250.0;
+                dirt.chemical.water = rand::thread_rng().gen_range(150.0..350.0);
                 dirt.chemical.nitrates = 60.0;
                 dirt.chemical.nitrites = 10.0;
 
