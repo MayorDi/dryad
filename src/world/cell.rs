@@ -1,7 +1,8 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Color};
+use crate::color::Color;
+use super::{Genome, Physical, Chemical, Gene, COUNT_GENES};
 
 /// `Cell` основная рабочая единица в которой и происходят все процессы.
 #[derive(Debug, Clone, Copy, PartialEq)]

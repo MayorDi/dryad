@@ -1,2 +1,3 @@
-pub mod colors;
+pub mod color;
 pub mod world;
+pub mod constants;

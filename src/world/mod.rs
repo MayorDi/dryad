@@ -7,8 +7,7 @@ mod composition;
 use nalgebra::Vector2;
 use rand::Rng;
 
-pub const SIZE_WORLD: [usize; 2] = [256, 32];
-pub const COUNT_SEGMENTS: usize = SIZE_WORLD[0] * SIZE_WORLD[1];
+pub use crate::constants::world::*;
 
 pub use block::*;
 pub use segment::*;
@@ -60,5 +59,51 @@ pub fn get_pos(index: usize, width: usize) -> (usize, usize) {
 }
 
 pub fn get_index(x: usize, y: usize, width: usize) -> usize {
-    y*width+x
+    y * width + x
+}
+
+pub trait Position {
+    fn get_position(&self) -> Vector2<usize>;
+}
+
+pub trait Behaviour {
+    fn update(&mut self, world: &mut World);
+}
+
+// oh no...
+fn get_idx_neighbors<T: Position>(segment: &T) -> (
+    (usize, usize), (usize, usize), usize, [Option<usize>; 4]
+) {
+    let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
+    let (x, y) = (segment.get_position().x, segment.get_position().y);
+    let idx = get_index(x, y, width);
+
+    // idx of neighbors
+    let (left_idx, right_idx, top_idx, bottom_idx) = (
+        check_limit_pos(x, y, width, height, (-1, 0)),
+        check_limit_pos(x, y, width, height, ( 1, 0)),
+        check_limit_pos(x, y, width, height, ( 1, 1)),
+        check_limit_pos(x, y, width, height, (-1, 1)),
+    );
+
+    ((x, y), (width, height), idx, [left_idx, right_idx, top_idx, bottom_idx])
+}
+
+// oh no...
+fn check_limit_pos(x: usize, y: usize, width: usize, height: usize, n: (i32, usize)) -> Option<usize> {
+    let (x, y, width, height) = (x as i32, y as i32, width as i32, height as i32);
+
+    if n.1 == 0 {
+        if  x + n.0 < 0 || x + n.0 > width {
+            return None;
+        }
+
+        return Some(get_index((x + n.0) as usize, y as usize, width as usize));
+    } 
+
+    if y + n.0 < 0 || y + n.0 > height {
+        return None;
+    }
+
+    return Some(get_index(x as usize, (y + n.0) as usize, width as usize));
 }

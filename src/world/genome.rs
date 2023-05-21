@@ -1,6 +1,6 @@
-use super::TypeCell;
+use crate::world::TypeCell;
 
-pub const COUNT_GENES: usize = 40;
+pub use crate::constants::genome::*;
 
 /// `Genome` хранит в себе набор типов, которые должны преобрести клетки при делении.
 #[derive(Debug, Clone, Copy, PartialEq)]
