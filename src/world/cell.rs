@@ -37,7 +37,15 @@ pub enum TypeCell {
 }
 
 impl Cell {
-    pub fn new(type_cell: TypeCell) -> Self {
+    pub fn new(position: Vector2<usize>, type_cell: TypeCell, id: usize) -> Self {
+        let chemical = Chemical {
+            water: 100.0,
+            glucose: 100.0,
+            metals: 1.0,
+            nitrates: 10.0,
+            nitrites: 1.0
+        };
+
         let mut physical = Physical::default();
         match type_cell {
             TypeCell::Builder => { 
@@ -62,7 +70,15 @@ impl Cell {
             }
         }
 
-        todo!()
+        Self {
+            id, 
+            position,
+            chemical,
+            physical,
+            type_cell,
+            children: [1, 0, 0, 0],
+            genome: Genome::default()
+        }
     }
 }
 
