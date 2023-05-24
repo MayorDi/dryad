@@ -16,3 +16,4 @@ homepage        = "https://github.com/MayorDi/dryad"
 rand            = { path = "../libs/rand",      version = "0.9.0"   }
 log             = { path = "../libs/log",       version = "0.4.17"  }
 nalgebra        = { path = "../libs/nalgebra",  version = "0.32.2"  }
+sdl2            = { path = "../libs/sdl2",      version = "*"       }

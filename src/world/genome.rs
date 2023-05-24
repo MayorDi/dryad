@@ -33,7 +33,7 @@ impl Default for Genome {
         genome.0[4] = Gene::new(TypeCell::Builder, [5, 0, 0, 6]);
 
         genome.0[5] = Gene::new(TypeCell::Builder, [7, 1, 1, 0]);
-        genome.0[7] = Gene::new(TypeCell::Builder, [1, 0, 0, 0]);
+        genome.0[7] = Gene::new(TypeCell::Photosynthetic, [0, 0, 0, 0]);
 
         genome.0[6] = Gene::new(TypeCell::Photosynthetic, [0; 4]);
 
@@ -41,7 +41,7 @@ impl Default for Genome {
     }
 }
 
-/// `Gene` хранит набор индивидуальный приобретаемый набор свойств для клетки.
+/// `Gene` хранит индивидуальный приобретаемый набор свойств для клетки.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct Gene {
     type_cell: TypeCell,

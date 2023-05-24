@@ -7,6 +7,7 @@ mod composition;
 use nalgebra::Vector2;
 use rand::Rng;
 
+use crate::{color::Color, constants::colors::COLOR_DIRT};
 pub use crate::constants::world::*;
 
 pub use block::*;
@@ -30,19 +31,19 @@ impl World {
         for (i, segment) in segments.iter_mut().enumerate() {
             let (x, y) = get_pos(i, SIZE_WORLD[0]);
 
-            if y < 10 {
+            if y < 20 {
                 let mut dirt = Block::default();
                 dirt.position = Vector2::new(x, y);
 
                 dirt.chemical.metals = 200.0;
                 dirt.chemical.water = rand::thread_rng().gen_range(150.0..350.0);
+
+                if y > 18 { dirt.chemical.water = 5000.0; }
+
                 dirt.chemical.nitrates = 60.0;
                 dirt.chemical.nitrites = 10.0;
 
-                dirt.physical.color.r = 0x8d as f32 / 255.0;
-                dirt.physical.color.g = 0x64 as f32 / 255.0;
-                dirt.physical.color.b = 0x5a as f32 / 255.0;
-                dirt.physical.color.a = 1.0;
+                dirt.physical.color = COLOR_DIRT;
 
                 *segment = Segment::Dirt(dirt);
             }
@@ -94,8 +95,8 @@ fn check_limit_pos(x: usize, y: usize, width: usize, height: usize, n: (i32, usi
     let (x, y, width, height) = (x as i32, y as i32, width as i32, height as i32);
 
     if n.1 == 0 {
-        if  x + n.0 < 0 || x + n.0 > width {
-            return None;
+        if x + n.0 < 0 || x + n.0 >= width {
+            return Some(get_index((width - 1) as usize, y as usize, width as usize));
         }
 
         return Some(get_index((x + n.0) as usize, y as usize, width as usize));

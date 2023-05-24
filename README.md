@@ -34,16 +34,19 @@ flowchart TD
     end
   end
   
+  id2 --> id2
   id2 ==> id3
   id2 -.-> id4
   id2 -.-> id5
   id2 --> id6
   
+  id3 ==> id3
   id3 ==> id2
   id3 --> id4
   id3 --> id5
   id3 ==> id6
   
+  id6 --> id6
   id6 ==> id3
   id6 --> id2
   
