@@ -2,7 +2,7 @@ use nalgebra::Vector2;
 use rand::Rng;
 
 use crate::color::Color;
-use super::{Genome, Physical, Chemical, Gene, COUNT_GENES};
+use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position};
 
 /// `Cell` основная рабочая единица в которой и происходят все процессы.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -79,6 +79,12 @@ impl Cell {
             children: [1, 0, 0, 0],
             genome: Genome::default()
         }
+    }
+}
+
+impl Position for Cell {
+    fn get_position(&self) -> Vector2<usize> {
+        self.position
     }
 }
 

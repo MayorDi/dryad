@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 use crate::world::World;
 
 pub struct App {

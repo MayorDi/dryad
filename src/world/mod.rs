@@ -1,16 +1,18 @@
 mod block;
 mod segment;
 mod cell;
+mod air;
 mod genome;
 mod composition;
 
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::{color::Color, constants::colors::COLOR_DIRT};
+use crate::constants::colors::{COLOR_DIRT, SKYBLUE};
 pub use crate::constants::world::*;
 
 pub use block::*;
+pub use air::*;
 pub use segment::*;
 pub use cell::*;
 pub use genome::*;
@@ -26,10 +28,15 @@ pub struct World {
 
 impl World {
     pub fn new() -> Self {
-        let mut segments: Segments = vec![Segment::Air(Physical::default()); COUNT_SEGMENTS];
+        let mut segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS];
 
         for (i, segment) in segments.iter_mut().enumerate() {
             let (x, y) = get_pos(i, SIZE_WORLD[0]);
+
+            *segment = Segment::Air(Air {
+                position: Vector2::new(x, y),
+                physical: Physical { light: 1.0, color: SKYBLUE }
+            });
 
             if y < 20 {
                 let mut dirt = Block::default();
@@ -38,7 +45,7 @@ impl World {
                 dirt.chemical.metals = 200.0;
                 dirt.chemical.water = rand::thread_rng().gen_range(150.0..350.0);
 
-                if y > 18 { dirt.chemical.water = 5000.0; }
+                if y > 18 { dirt.chemical.water = 500.0; }
 
                 dirt.chemical.nitrates = 60.0;
                 dirt.chemical.nitrites = 10.0;
@@ -48,6 +55,7 @@ impl World {
                 *segment = Segment::Dirt(dirt);
             }
         }
+
         Self {
             segments,
             light: 1000.0
@@ -67,44 +75,30 @@ pub trait Position {
     fn get_position(&self) -> Vector2<usize>;
 }
 
-pub trait Behaviour {
-    fn update(&mut self, world: &mut World);
-}
-
 // oh no...
-fn get_idx_neighbors<T: Position>(segment: &T) -> (
-    (usize, usize), (usize, usize), usize, [Option<usize>; 4]
+pub fn get_idx_neighbors<T: Position>(segment: &T) -> (
+    (usize, usize), (usize, usize), [usize; 4]
 ) {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
     let (x, y) = (segment.get_position().x, segment.get_position().y);
-    let idx = get_index(x, y, width);
 
     // idx of neighbors
     let (left_idx, right_idx, top_idx, bottom_idx) = (
-        check_limit_pos(x, y, width, height, (-1, 0)),
-        check_limit_pos(x, y, width, height, ( 1, 0)),
-        check_limit_pos(x, y, width, height, ( 1, 1)),
-        check_limit_pos(x, y, width, height, (-1, 1)),
+        get_index(limit(0.0, width as f32 - 1.0, x as f32 - 1.0) as usize, y, width),
+        get_index(limit(0.0, width as f32 - 1.0, x as f32 + 1.0) as usize, y, width),
+        get_index(x, limit(0.0, height as f32 - 1.0, y as f32 + 1.0) as usize, width),
+        get_index(x, limit(0.0, height as f32 - 1.0, y as f32 - 1.0) as usize, width),
     );
 
-    ((x, y), (width, height), idx, [left_idx, right_idx, top_idx, bottom_idx])
+    ((x, y), (width, height), [left_idx, right_idx, top_idx, bottom_idx])
 }
 
-// oh no...
-fn check_limit_pos(x: usize, y: usize, width: usize, height: usize, n: (i32, usize)) -> Option<usize> {
-    let (x, y, width, height) = (x as i32, y as i32, width as i32, height as i32);
-
-    if n.1 == 0 {
-        if x + n.0 < 0 || x + n.0 >= width {
-            return Some(get_index((width - 1) as usize, y as usize, width as usize));
-        }
-
-        return Some(get_index((x + n.0) as usize, y as usize, width as usize));
-    } 
-
-    if y + n.0 < 0 || y + n.0 > height {
-        return None;
+pub fn limit(min: f32, max: f32, n: f32) -> f32 {
+    if n < min {
+        return min;
+    } else if n > max {
+        return max;
     }
 
-    return Some(get_index(x as usize, (y + n.0) as usize, width as usize));
+    n
 }
