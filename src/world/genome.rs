@@ -44,10 +44,10 @@ impl Default for Genome {
 /// `Gene` хранит индивидуальный приобретаемый набор свойств для клетки.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct Gene {
-    type_cell: TypeCell,
+    pub type_cell: TypeCell,
     
     /// \[self, left, right, top\]
-    children: [usize; 4],
+    pub children: [usize; 4],
 }
 
 impl Gene {

@@ -1,11 +1,10 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::color::Color;
 use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position};
 
 /// `Cell` основная рабочая единица в которой и происходят все процессы.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Cell {
     pub id: usize,
 
@@ -16,6 +15,7 @@ pub struct Cell {
     pub type_cell: TypeCell,
     pub children: [usize; 4],
 
+    pub step: usize,
     pub genome: Genome,
 }
 
@@ -49,23 +49,18 @@ impl Cell {
         let mut physical = Physical::default();
         match type_cell {
             TypeCell::Builder => { 
-                physical.color = Color::from_byte(0x80, 0xb8, 0x63, 255);
                 physical.light = 0.5;
             },
             TypeCell::Conductor => { 
-                physical.color = Color::from_byte(0x80, 0x5d, 0x55, 255);
                 physical.light = 0.2;
             },
             TypeCell::Consumer => {
-                physical.color = Color::from_byte(0xd4, 0x80, 0x6b, 255);
                 physical.light = 0.3;
             },
             TypeCell::Photosynthetic => {
-                physical.color = Color::from_byte(0x80, 0xb8, 0x63, 255);
                 physical.light = 0.8;
             },
             TypeCell::Producer => {
-                physical.color = Color::from_byte(0xed, 0xf2, 0xa8, 255);
                 physical.light = 0.1;
             }
         }
@@ -77,6 +72,7 @@ impl Cell {
             physical,
             type_cell,
             children: [1, 0, 0, 0],
+            step: 0,
             genome: Genome::default()
         }
     }
@@ -98,6 +94,7 @@ impl Default for Cell {
             physical: Physical::default(),
             type_cell: TypeCell::default(),
             children: [0; 4],
+            step: 0,
             genome: Genome([Gene::default(); COUNT_GENES])
         }
     }

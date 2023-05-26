@@ -18,7 +18,7 @@ pub use cell::*;
 pub use genome::*;
 pub use composition::*;
 
-type Segments = Vec<Segment>;
+type Segments = Box<[Segment]>;
 
 #[derive(Debug, Clone)]
 pub struct World {
@@ -28,15 +28,12 @@ pub struct World {
 
 impl World {
     pub fn new() -> Self {
-        let mut segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS];
+        let mut segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS].into_boxed_slice();
 
         for (i, segment) in segments.iter_mut().enumerate() {
             let (x, y) = get_pos(i, SIZE_WORLD[0]);
 
-            *segment = Segment::Air(Air {
-                position: Vector2::new(x, y),
-                physical: Physical { light: 1.0, color: SKYBLUE }
-            });
+            *segment = Segment::Air(Air::new(Vector2::new(x, y)));
 
             if y < 20 {
                 let mut dirt = Block::default();
@@ -55,6 +52,10 @@ impl World {
                 *segment = Segment::Dirt(dirt);
             }
         }
+
+        let mut cell = Cell::new(Vector2::new(128, 50), TypeCell::Producer, rand::thread_rng().gen_range(0..1000000));
+
+        segments[get_index(128, 50, SIZE_WORLD[0])] = Segment::Cell(cell);
 
         Self {
             segments,
