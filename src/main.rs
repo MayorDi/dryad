@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 
-use dryad::{app::{App, Settings}, world::{World, SIZE_WORLD, Segment, get_idx_neighbors, TypeCell, get_index, Position, get_pos, Air, Cell}, color::*};
+use dryad::{app::*, world::*, color::*};
 use nalgebra::Vector2;
 use sdl2::{self, event::Event, keyboard::Keycode, rect::Rect};
 
@@ -29,12 +29,14 @@ pub fn main() -> Result<(), String> {
 
     let mut event_pump = sdl_context.event_pump()?;
 
+    let mut world_buf = app.world.clone();
+
     'running: loop {
         canvas.set_draw_color(BACKGROUND.to_bytes());
         canvas.clear();
 
-        let mut world_buf = app.world.clone();
-        for i in 0..app.world.segments.len() {
+        world_buf = app.world.clone();
+        for i in 0..COUNT_SEGMENTS {
             let (
                 (x, y), 
                 (width, _height), 
@@ -56,27 +58,29 @@ pub fn main() -> Result<(), String> {
             }
 
             if let Segment::Cell(_) = world_buf.segments[i] {
-                if let TypeCell::Producer = world_buf.segments[i].to_cell().type_cell {
-                    if let Segment::Dirt(_) = world_buf.segments[neighbors[3]] {
-                        let mut cell = world_buf.segments[i].to_cell();
-                        let gene = cell.genome.0[cell.step];
+                match world_buf.segments[i].to_cell().type_cell {
+                    TypeCell::Producer => {
+                        if let Segment::Dirt(_) = world_buf.segments[neighbors[3]] {
+                            let mut cell = world_buf.segments[i].to_cell();
+                            let gene = cell.genome.0[cell.step];
+    
+                            cell.children = gene.children;
+                            cell.type_cell = gene.type_cell;
+    
+                            world_buf.segments[i].to_cell().step += 1;
+    
+                        } else if let Segment::Air(_) = world_buf.segments[neighbors[3]] {
+                            let mut cell = world_buf.segments[i].to_cell().clone();
+                            cell.position.y -= 1;
+                            
+                            world_buf.segments[get_index(x, y - 1, width)] = Segment::Cell(cell);
+                            world_buf.segments[i] = Segment::Air(Air::new(Vector2::new(x, y)));
+                        }
+                    },
 
-                        cell.children = gene.children;
-                        cell.type_cell = gene.type_cell;
-
-                        world_buf.segments[i].to_cell().step += 1;
-
-                    } else if let Segment::Air(_) = world_buf.segments[neighbors[3]] {
-                        let mut cell = world_buf.segments[i].to_cell().clone();
-                        cell.position.y -= 1;
-                        
-                        world_buf.segments[get_index(x, y - 1, width)] = Segment::Cell(cell);
-                        world_buf.segments[i] = Segment::Air(Air::new(Vector2::new(x, y)));
-                    }
-                }
-
-                if let TypeCell::Builder = world_buf.segments[i].to_cell().type_cell {
-                 
+                    TypeCell::Builder => {},
+                    
+                    _ => {}
                 }
             }
 
@@ -91,6 +95,7 @@ pub fn main() -> Result<(), String> {
                     canvas.set_draw_color(air.physical.color.to_bytes());
                     canvas.fill_rect(rect).unwrap();
                 },
+
                 Segment::Cell(cell) => {
                     match cell.type_cell {
                         TypeCell::Builder => { 
