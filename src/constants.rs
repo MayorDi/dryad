@@ -29,5 +29,5 @@ pub mod world {
 }
 
 pub mod genome {
-    pub const COUNT_GENES: usize = 40;
+    pub const COUNT_GENES: usize = 10;
 }

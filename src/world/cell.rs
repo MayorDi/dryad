@@ -72,7 +72,7 @@ impl Cell {
             physical,
             type_cell,
             children: [1, 0, 0, 0],
-            step: 0,
+            step: 1,
             genome: Genome::default()
         }
     }
@@ -87,7 +87,7 @@ impl Position for Cell {
 impl Default for Cell {
     fn default() -> Self {
         Self {
-            id: rand::thread_rng().gen_range(0..1000000),
+            id: 0,
 
             position: Vector2::new(0, 0),
             chemical: Chemical::default(),

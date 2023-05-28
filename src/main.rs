@@ -57,17 +57,16 @@ pub fn main() -> Result<(), String> {
                 }
             }
 
-            if let Segment::Cell(_) = world_buf.segments[i] {
-                match world_buf.segments[i].to_cell().type_cell {
+            if let Segment::Cell(_) = app.world.segments[i] {
+                match app.world.segments[i].to_cell().type_cell {
                     TypeCell::Producer => {
                         if let Segment::Dirt(_) = world_buf.segments[neighbors[3]] {
                             let mut cell = world_buf.segments[i].to_cell();
-                            let gene = cell.genome.0[cell.step];
-    
+                            let gene = cell.genome.0[cell.children[0]];
+
+                            cell.id += 1;
                             cell.children = gene.children;
                             cell.type_cell = gene.type_cell;
-    
-                            world_buf.segments[i].to_cell().step += 1;
     
                         } else if let Segment::Air(_) = world_buf.segments[neighbors[3]] {
                             let mut cell = world_buf.segments[i].to_cell().clone();
@@ -76,9 +75,61 @@ pub fn main() -> Result<(), String> {
                             world_buf.segments[get_index(x, y - 1, width)] = Segment::Cell(cell);
                             world_buf.segments[i] = Segment::Air(Air::new(Vector2::new(x, y)));
                         }
-                    },
+                    }
 
-                    TypeCell::Builder => {},
+                    TypeCell::Builder => {
+                        let parent = world_buf.segments[i].to_cell().clone();
+                        let neighbors = [
+                            i,
+                            neighbors[0],
+                            neighbors[1],
+                            neighbors[2],
+                        ];
+                        let mut children = [
+                            parent.clone(),
+                            parent.clone(),
+                            parent.clone(),
+                            parent.clone(),
+                        ];
+
+                        let gene = parent.genome.0[parent.children[0]];
+                        children[0].type_cell = gene.type_cell;
+                        children[0].children = gene.children;
+
+                        let gene = parent.genome.0[parent.children[1]];
+                        children[1].position.x = limit(
+                            0.0, width as f32 - 1.0, 
+                            children[1].position.x as f32 - 1.0
+                        ) as usize;
+                        children[1].type_cell = gene.type_cell;
+                        children[1].children = gene.children;
+
+                        let gene = parent.genome.0[parent.children[2]];
+                        children[2].position.x = limit(
+                            0.0, width as f32 - 1.0, 
+                            children[2].position.x as f32 + 1.0
+                        ) as usize;
+                        children[2].type_cell = gene.type_cell;
+                        children[2].children = gene.children;
+
+                        let gene = parent.genome.0[parent.children[3]];
+                        children[3].position.y += 1;
+                        children[3].type_cell = gene.type_cell;
+                        children[3].children = gene.children;
+                        
+                        
+                        for idx in 0..4 {
+                            if parent.children[idx] == 0 { continue; }
+
+                            if idx != 0 {
+                                if let Segment::Air(_) = world_buf.segments[neighbors[idx]] {
+                                    world_buf.segments[neighbors[idx]] = Segment::Cell(children[idx].clone());
+                                }
+                            } else {
+                                world_buf.segments[neighbors[idx]] = Segment::Cell(children[idx].clone());
+                            }
+                        }
+                    }
                     
                     _ => {}
                 }

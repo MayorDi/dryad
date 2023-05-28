@@ -8,7 +8,7 @@ mod composition;
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::constants::colors::{COLOR_DIRT, SKYBLUE};
+use crate::constants::colors::*;
 pub use crate::constants::world::*;
 
 pub use block::*;
@@ -53,7 +53,7 @@ impl World {
             }
         }
 
-        let mut cell = Cell::new(Vector2::new(128, 50), TypeCell::Producer, rand::thread_rng().gen_range(0..1000000));
+        let cell = Cell::new(Vector2::new(128, 50), TypeCell::Producer, rand::thread_rng().gen_range(0..1000000));
 
         segments[get_index(128, 50, SIZE_WORLD[0])] = Segment::Cell(cell);
 
