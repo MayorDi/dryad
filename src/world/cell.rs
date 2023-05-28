@@ -7,6 +7,7 @@ use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position};
 #[derive(Debug, Clone, PartialEq)]
 pub struct Cell {
     pub id: usize,
+    pub lifetime: usize,
 
     pub position: Vector2<usize>,
     pub chemical: Chemical,
@@ -66,7 +67,8 @@ impl Cell {
         }
 
         Self {
-            id, 
+            id,
+            lifetime: 0,
             position,
             chemical,
             physical,
@@ -88,7 +90,7 @@ impl Default for Cell {
     fn default() -> Self {
         Self {
             id: 0,
-
+            lifetime: 0,
             position: Vector2::new(0, 0),
             chemical: Chemical::default(),
             physical: Physical::default(),

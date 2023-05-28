@@ -28,6 +28,10 @@ pub mod world {
     pub const NITROGEN_EXCHANGE_COEFFICIENT: f32 = 0.1;
 }
 
+pub mod cell {
+    pub const MAX_LIFE_TIME: usize = 100;
+}
+
 pub mod genome {
     pub const COUNT_GENES: usize = 10;
 }

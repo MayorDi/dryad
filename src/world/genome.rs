@@ -18,10 +18,11 @@ impl Default for Genome {
     //       |   |
     // 5<----+ >-+
     //       |   |
-    // 6<----+   |
-    //           |
-    // 7<--------+
-    // 
+    // 6--+ <+   |
+    //    |      |
+    // 7<-+------+
+    //    |
+    // 8<-+
     fn default() -> Self {
         let mut genome = Genome([Gene::default(); COUNT_GENES]);
 
@@ -33,9 +34,10 @@ impl Default for Genome {
         genome.0[4] = Gene::new(TypeCell::Builder, [5, 0, 0, 6]);
 
         genome.0[5] = Gene::new(TypeCell::Builder, [7, 1, 1, 0]);
-        genome.0[7] = Gene::new(TypeCell::Photosynthetic, [0, 0, 0, 0]);
+        genome.0[7] = Gene::new(TypeCell::Builder, [0, 0, 0, 0]);
 
-        genome.0[6] = Gene::new(TypeCell::Photosynthetic, [0; 4]);
+        genome.0[6] = Gene::new(TypeCell::Builder, [8, 0, 0, 1]);
+        genome.0[8] = Gene::new(TypeCell::Photosynthetic, [0, 0, 0, 0]);
 
         genome
     }
