@@ -56,4 +56,14 @@ impl Gene {
     pub fn new(type_cell: TypeCell, children: [usize; 4]) -> Self {
         Self { type_cell, children }
     }
+
+    pub fn get_count_active_division(&self) -> u8 {
+        let mut count = 0;
+
+        self.children.map(|i| {
+            if i != 0 { count += 1; }
+        });
+        
+        count
+    }
 }

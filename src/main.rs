@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 
-use dryad::{app::*, color::*, world::*, constants::cell::MAX_LIFE_TIME};
+use dryad::{app::*, color::*, constants::cell::MAX_LIFE_TIME, world::*};
 use nalgebra::Vector2;
 use sdl2::{self, event::Event, keyboard::Keycode, rect::Rect};
 
@@ -60,7 +60,50 @@ pub fn main() -> Result<(), String> {
 
                 Segment::Cell(_) => {
                     match app.world.segments[i].to_cell().type_cell {
+                        TypeCell::Photosynthetic => {
+                            world_buf.segments[i].to_cell().chemical.glucose -= 1.0;
+
+                            let wtr = 10.0 * 0.2;
+                            let gluc = 2.0;
+
+                            for j in 0..4 {
+                                if let Segment::Cell(neighbor) = &app.world.segments[neighbors[j]] {
+                                    if neighbor.id != world_buf.segments[i].to_cell().id {
+                                        continue;
+                                    }
+
+                                    if world_buf.segments[i].to_cell().chemical.water
+                                        > neighbor.chemical.water
+                                        && 200.0 > neighbor.chemical.water
+                                    {
+                                        world_buf.segments[i].to_cell().chemical.water -= wtr;
+                                        world_buf.segments[neighbors[j]]
+                                            .to_cell()
+                                            .chemical
+                                            .water += wtr;
+                                    }
+
+                                    if world_buf.segments[i].to_cell().chemical.glucose
+                                        > neighbor.chemical.glucose
+                                        && 200.0 > neighbor.chemical.glucose
+                                    {
+                                        world_buf.segments[i].to_cell().chemical.water -= gluc;
+                                        world_buf.segments[neighbors[j]]
+                                            .to_cell()
+                                            .chemical
+                                            .water += gluc;
+                                    }
+                                }
+                            }
+
+                            world_buf.segments[i]
+                                .to_cell()
+                                .synthesize_glucose(app.world.light);
+                        }
+
                         TypeCell::Producer => {
+                            world_buf.segments[i].to_cell().chemical.glucose -= 5.0;
+
                             if let Segment::Dirt(_) = world_buf.segments[neighbors[3]] {
                                 let mut cell = world_buf.segments[i].to_cell();
                                 let gene = cell.genome.0[cell.children[0]];
@@ -80,65 +123,99 @@ pub fn main() -> Result<(), String> {
                         }
 
                         TypeCell::Builder => {
-                            let parent = world_buf.segments[i].to_cell().clone();
-                            let neighbors = [i, neighbors[0], neighbors[1], neighbors[2]];
-                            let mut children = [
-                                parent.clone(),
-                                parent.clone(),
-                                parent.clone(),
-                                parent.clone(),
-                            ];
+                            let wtr = 10.0 * 0.2;
+                            let gluc = 2.0;
 
-                            let gene = parent.genome.0[parent.children[0]];
-                            children[0].type_cell = gene.type_cell;
-                            children[0].children = gene.children;
+                            for j in 0..4 {
+                                if let Segment::Cell(neighbor) = &app.world.segments[neighbors[j]] {
+                                    if neighbor.id != world_buf.segments[i].to_cell().id {
+                                        continue;
+                                    }
 
-                            let gene = parent.genome.0[parent.children[1]];
-                            children[1].position.x =
-                                limit(0.0, width as f32 - 1.0, children[1].position.x as f32 - 1.0)
-                                    as usize;
-                            children[1].type_cell = gene.type_cell;
-                            children[1].children = gene.children;
-                            children[1].lifetime = 0;
-
-                            let gene = parent.genome.0[parent.children[2]];
-                            children[2].position.x =
-                                limit(0.0, width as f32 - 1.0, children[2].position.x as f32 + 1.0)
-                                    as usize;
-                            children[2].type_cell = gene.type_cell;
-                            children[2].children = gene.children;
-                            children[2].lifetime = 0;
-
-                            let gene = parent.genome.0[parent.children[3]];
-                            children[3].position.y += 1;
-                            children[3].type_cell = gene.type_cell;
-                            children[3].children = gene.children;
-                            children[3].lifetime = 0;
-
-                            for idx in 0..4 {
-                                if parent.children[idx] == 0 {
-                                    continue;
+                                    if world_buf.segments[i].to_cell().chemical.water
+                                        > neighbor.chemical.water
+                                        && 200.0 > neighbor.chemical.water
+                                    {
+                                        world_buf.segments[i].to_cell().chemical.water -= wtr;
+                                        world_buf.segments[neighbors[j]]
+                                            .to_cell()
+                                            .chemical
+                                            .water += wtr;
+                                    }
                                 }
+                            }
 
-                                if idx != 0 {
-                                    if let Segment::Air(_) = world_buf.segments[neighbors[idx]] {
+                            world_buf.segments[i].to_cell().chemical.glucose -= 10.0;
+                            let parent = world_buf.segments[i].to_cell().clone();
+                            if parent.chemical.glucose > 80.0 {
+                                let neighbors = [i, neighbors[0], neighbors[1], neighbors[2]];
+                                let mut children = [
+                                    parent.clone(),
+                                    parent.clone(),
+                                    parent.clone(),
+                                    parent.clone(),
+                                ];
+
+                                let gene = parent.genome.0[parent.children[0]];
+                                children[0].type_cell = gene.type_cell;
+                                children[0].children = gene.children;
+
+                                world_buf.segments[i].to_cell().chemical.glucose = parent.chemical.glucose / gene.get_count_active_division() as f32;
+
+                                let gene = parent.genome.0[parent.children[1]];
+                                children[1].position.x = limit(
+                                    0.0,
+                                    width as f32 - 1.0,
+                                    children[1].position.x as f32 - 1.0,
+                                ) as usize;
+                                children[1].type_cell = gene.type_cell;
+                                children[1].children = gene.children;
+                                children[1].lifetime = 0;
+
+                                let gene = parent.genome.0[parent.children[2]];
+                                children[2].position.x = limit(
+                                    0.0,
+                                    width as f32 - 1.0,
+                                    children[2].position.x as f32 + 1.0,
+                                ) as usize;
+                                children[2].type_cell = gene.type_cell;
+                                children[2].children = gene.children;
+                                children[2].lifetime = 0;
+
+                                let gene = parent.genome.0[parent.children[3]];
+                                children[3].position.y += 1;
+                                children[3].type_cell = gene.type_cell;
+                                children[3].children = gene.children;
+                                children[3].lifetime = 0;
+
+                                for idx in 0..4 {
+                                    if parent.children[idx] == 0 {
+                                        continue;
+                                    }
+
+                                    if idx != 0 {
+                                        if let Segment::Air(_) = world_buf.segments[neighbors[idx]]
+                                        {
+                                            children[idx].chemical.glucose = parent.chemical.glucose / gene.get_count_active_division() as f32;
+
+                                            world_buf.segments[neighbors[idx]] =
+                                                Segment::Cell(children[idx].clone());
+                                        }
+                                    } else {
                                         world_buf.segments[neighbors[idx]] =
                                             Segment::Cell(children[idx].clone());
                                     }
-                                } else {
-                                    world_buf.segments[neighbors[idx]] =
-                                        Segment::Cell(children[idx].clone());
                                 }
                             }
                         }
 
-                        _ => {}
+                        _ => {world_buf.segments[i].to_cell().chemical.glucose -= 5.0;}
                     }
 
                     if let Segment::Cell(cell) = &mut world_buf.segments[i] {
                         cell.lifetime += 1;
 
-                        if cell.lifetime > MAX_LIFE_TIME {
+                        if cell.lifetime > MAX_LIFE_TIME || cell.chemical.glucose < 0.0 {
                             world_buf.segments[i] = Segment::Air(Air::new(cell.position));
                         }
                     }
@@ -162,7 +239,7 @@ pub fn main() -> Result<(), String> {
                 Segment::Cell(cell) => {
                     match cell.type_cell {
                         TypeCell::Builder => {
-                            canvas.set_draw_color((0x80, 0xb8, 0x63, 255));
+                            canvas.set_draw_color((0x54, 0x92, 0x48, 255));
                         }
                         TypeCell::Conductor => {
                             canvas.set_draw_color((0x80, 0x5d, 0x55, 255));

@@ -41,7 +41,7 @@ impl Cell {
     pub fn new(position: Vector2<usize>, type_cell: TypeCell, id: usize) -> Self {
         let chemical = Chemical {
             water: 100.0,
-            glucose: 100.0,
+            glucose: 300.0,
             metals: 1.0,
             nitrates: 10.0,
             nitrites: 1.0
@@ -98,6 +98,13 @@ impl Cell {
                     rand::thread_rng().gen_range(0..COUNT_GENES),
                 ];
             }
+        }
+    }
+
+    pub fn synthesize_glucose(&mut self, light: f32) {
+        if self.chemical.glucose + 8.0 * light * 0.2 < 200.0 {
+            self.chemical.water -= 8.0;
+            self.chemical.glucose += 8.0 * light * 0.2;
         }
     }
 }
