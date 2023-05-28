@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 
-use dryad::{app::*, color::*, world::*};
+use dryad::{app::*, color::*, world::*, constants::cell::MAX_LIFE_TIME};
 use nalgebra::Vector2;
 use sdl2::{self, event::Event, keyboard::Keycode, rect::Rect};
 
@@ -20,7 +20,7 @@ pub fn main() -> Result<(), String> {
     let video_subsystem = sdl_context.video()?;
 
     let window = video_subsystem
-        .window("Dryad", 1300, 600)
+        .window(app.settings.title.as_str(), 1300, 600)
         .position_centered()
         .resizable()
         .opengl()
@@ -68,6 +68,7 @@ pub fn main() -> Result<(), String> {
                                 cell.id += 1;
                                 cell.children = gene.children;
                                 cell.type_cell = gene.type_cell;
+                                cell.mutate();
                             } else if let Segment::Air(_) = world_buf.segments[neighbors[3]] {
                                 let mut cell = world_buf.segments[i].to_cell().clone();
                                 cell.position.y -= 1;
@@ -133,7 +134,14 @@ pub fn main() -> Result<(), String> {
 
                         _ => {}
                     }
-                    // world_buf.segments[i].to_cell().lifetime += 1;
+
+                    if let Segment::Cell(cell) = &mut world_buf.segments[i] {
+                        cell.lifetime += 1;
+
+                        if cell.lifetime > MAX_LIFE_TIME {
+                            world_buf.segments[i] = Segment::Air(Air::new(cell.position));
+                        }
+                    }
                 }
                 _ => {}
             }

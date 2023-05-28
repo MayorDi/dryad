@@ -78,6 +78,28 @@ impl Cell {
             genome: Genome::default()
         }
     }
+
+    pub fn mutate(&mut self) {
+        if rand::thread_rng().gen_range(0.0..1.0) < 0.05 {
+            for gene in self.genome.0.iter_mut() {
+                match rand::thread_rng().gen_range(0..10) {
+                    0 => gene.type_cell = TypeCell::Consumer,
+                    1 => gene.type_cell = TypeCell::Builder,
+                    2 => gene.type_cell = TypeCell::Producer,
+                    3 => gene.type_cell = TypeCell::Photosynthetic,
+                    4 => gene.type_cell = TypeCell::Conductor,
+                    _ => {}
+                }
+
+                gene.children = [
+                    rand::thread_rng().gen_range(0..COUNT_GENES),
+                    rand::thread_rng().gen_range(0..COUNT_GENES),
+                    rand::thread_rng().gen_range(0..COUNT_GENES),
+                    rand::thread_rng().gen_range(0..COUNT_GENES),
+                ];
+            }
+        }
+    }
 }
 
 impl Position for Cell {

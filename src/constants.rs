@@ -22,16 +22,16 @@ pub mod colors {
 }
 
 pub mod world {
-    pub const SIZE_WORLD: [usize; 2] = [256, 64];
+    pub const SIZE_WORLD: [usize; 2] = [256, 128];
     pub const COUNT_SEGMENTS: usize = SIZE_WORLD[0] * SIZE_WORLD[1];
     pub const WATER_EXCHANGE_COEFFICIENT: f32 = 0.2;
     pub const NITROGEN_EXCHANGE_COEFFICIENT: f32 = 0.1;
 }
 
 pub mod cell {
-    pub const MAX_LIFE_TIME: usize = 100;
+    pub const MAX_LIFE_TIME: usize = 40;
 }
 
 pub mod genome {
-    pub const COUNT_GENES: usize = 10;
+    pub const COUNT_GENES: usize = 20;
 }
