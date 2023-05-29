@@ -9,12 +9,7 @@ use sdl2::{self, event::Event, keyboard::Keycode, rect::Rect};
 const SIZE_RECT: i32 = 5;
 
 pub fn main() -> Result<(), String> {
-    let mut app = App {
-        world: World::new(),
-        settings: Settings {
-            title: String::from("Dryad"),
-        },
-    };
+    let mut app = App::init();
 
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;

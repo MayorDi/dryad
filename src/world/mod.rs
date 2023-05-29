@@ -30,7 +30,14 @@ impl World {
     pub fn new() -> Self {
         let mut segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS].into_boxed_slice();
 
-        for (i, segment) in segments.iter_mut().enumerate() {
+        Self {
+            segments,
+            light: 100.0
+        }
+    }
+
+    pub fn generate(&mut self) {
+        for (i, segment) in self.segments.iter_mut().enumerate() {
             let (x, y) = get_pos(i, SIZE_WORLD[0]);
 
             *segment = Segment::Air(Air::new(Vector2::new(x, y)));
@@ -55,12 +62,7 @@ impl World {
 
         let cell = Cell::new(Vector2::new(128, 25), TypeCell::Producer, rand::thread_rng().gen_range(0..1000000));
 
-        segments[get_index(128, 25, SIZE_WORLD[0])] = Segment::Cell(cell);
-
-        Self {
-            segments,
-            light: 1000.0
-        }
+        self.segments[get_index(128, 25, SIZE_WORLD[0])] = Segment::Cell(cell);
     }
 }
 
