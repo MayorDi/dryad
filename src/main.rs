@@ -23,9 +23,7 @@ pub fn main() -> Result<(), String> {
         .map_err(|e| e.to_string())?;
 
     let mut canvas = window.into_canvas().build().map_err(|e| e.to_string())?;
-
     let mut event_pump = sdl_context.event_pump()?;
-
     let mut world_buf = app.world.clone();
 
     'running: loop {

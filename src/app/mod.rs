@@ -1,48 +1,67 @@
-use crate::world::World;
+use std::time::Duration;
+
+use crate::{world::World, constants::colors::BACKGROUND};
 
 pub mod sdl;
 
 pub use sdl::*;
-
+use sdl2::{event::Event, keyboard::Keycode};
 
 pub struct App {
     pub world: World,
     pub settings: Settings,
-    pub render: fn(&'static Self),
-    pub update: fn(&'static mut Self),
+    pub sdl: SDL
 }
 
 impl App {
-    pub fn init(render: fn(&'static Self), update: fn(&'static mut Self)) -> Self {
+    pub fn init() -> Self {
         let mut world = World::new();
         world.generate();
 
         let settings = Settings::default();
+        let sdl = SDL::init(&settings);
 
         Self {
             world,
             settings,
-            render,
-            update,
+            sdl,
         }
     }
 
-    // pub fn run(mut self) {
-    //     let update = self.update;
-    //     let render = self.render;
+    pub fn run(&mut self) {
+        let mut event_pump = self.sdl.sdl_context.event_pump().unwrap();
 
-    //     std::thread::Builder::new()
-    //         .name("update".to_string())
-    //         .spawn(|| {
-    //             update(&mut self);
-    //         });
+        'running: loop {
+            self.sdl.canvas.set_draw_color(BACKGROUND.to_bytes());
+            self.sdl.canvas.clear();
 
-    //     std::thread::Builder::new()
-    //         .name("render".to_string())
-    //         .spawn(|| {
-    //             render(&self);
-    //         });
-    // }
+            self.update();
+            self.render();
+    
+            for event in event_pump.poll_iter() {
+                match event {
+                    Event::Quit { .. }
+                    | Event::KeyDown {
+                        keycode: Some(Keycode::Escape),
+                        ..
+                    } => break 'running,
+                    _ => {}
+                }
+            }
+
+            self.sdl.canvas.present();
+    
+            ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+        }
+    }
+
+    fn update(&mut self) {
+
+    }
+
+    fn render(&self) {
+
+    }
 }
 
 pub struct Settings {

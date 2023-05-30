@@ -13,7 +13,7 @@ repository      = "https://github.com/MayorDi/dryad"
 homepage        = "https://github.com/MayorDi/dryad"
 
 [dependencies]
-rand            = { path = "../libs/rand",      version = "0.9.0"   }
-log             = { path = "../libs/log",       version = "0.4.17"  }
-nalgebra        = { path = "../libs/nalgebra",  version = "0.32.2"  }
-sdl2            = { path = "../libs/sdl2",      version = "*"       }
+rand            = "0.8.5" 
+log             = "0.4.17"
+nalgebra        = "0.32.2"
+sdl2            = "0.35.2"
