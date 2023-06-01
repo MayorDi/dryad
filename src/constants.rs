@@ -1,3 +1,7 @@
+pub mod app {
+    pub const FPS: u32 = 60;
+}
+
 pub mod colors {
     use crate::color::Color;
 
