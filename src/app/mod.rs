@@ -40,7 +40,7 @@ impl App {
 
             let world_read = self.world.clone();
             for idx in 0..world_read.segments.iter().len() {
-                self.update(idx);
+                self.update(&world_read, idx);
                 App::render(&world_read, &mut self.sdl, idx);
             }
     

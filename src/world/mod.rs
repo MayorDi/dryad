@@ -78,6 +78,10 @@ pub trait Position {
     fn get_position(&self) -> Vector2<usize>;
 }
 
+pub trait Behaviour {
+    fn update(&mut self, world: &mut World);
+}
+
 // oh no...
 pub fn get_idx_neighbors<T: Position>(segment: &T) -> (
     (usize, usize), (usize, usize), [usize; 4]

@@ -1,7 +1,7 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position};
+use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position, Behaviour};
 
 /// `Cell` основная рабочая единица в которой и происходят все процессы.
 #[derive(Debug, Clone, PartialEq)]
@@ -112,6 +112,12 @@ impl Cell {
 impl Position for Cell {
     fn get_position(&self) -> Vector2<usize> {
         self.position
+    }
+}
+
+impl Behaviour for Cell {
+    fn update(&mut self, world: &mut super::World) {
+        
     }
 }
 

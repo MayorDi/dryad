@@ -16,7 +16,7 @@ impl Segment {
             return block;
         }
 
-        return self.to_block();
+        panic!("Error: unable to convert block.");
     }
 
     /// Используется когда точно известно, что за объект. <br>
@@ -26,7 +26,7 @@ impl Segment {
             return cell;
         }
 
-        return self.to_cell();
+        panic!("Error: unable to convert cell.");
     }
 }
 
