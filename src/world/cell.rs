@@ -1,9 +1,9 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position, Behaviour};
+use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position, Behaviour, World};
 
-/// `Cell` основная рабочая единица в которой и происходят все процессы.
+/// `Cell` is the main working unit in which most of all processes take place.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Cell {
     pub id: usize,
@@ -20,13 +20,13 @@ pub struct Cell {
     pub genome: Genome,
 }
 
-/// `TypeCell` отвечает за определение типа для `Cell`.<br>
-/// * `Photosynthetic` - отвечает за фотосинтез, а следовательно и за создание энергии.
-/// * `Conductor` - является хорошим транспортёром питательных веществ.
-/// * `Builder` - тип, что производит создание новых клеток. 
-/// * `Producer` - тип, что создаёт новую особь.
-/// * `Consumer` - тип, что выступает в качестве корней, 
-/// единственный тип, обеспечивающий обмен между почвой и остальным организмом.
+/// `Type Cell` is responsible for determining the type for `Cell`: <br>
+/// * `Photosynthetic` is responsible for photosynthesis, and therefore for the creation of energy.
+/// * `Conductor` is a good nutrient transporter.
+/// * `Builder` is the type that creates new cells.
+/// * `Producer` is the type that creates a new cell.
+/// * `Consumer` is the type that acts as roots,
+/// the only type that provides an exchange between the soil and the rest of the organism.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum TypeCell {
     Photosynthetic,
@@ -116,7 +116,7 @@ impl Position for Cell {
 }
 
 impl Behaviour for Cell {
-    fn update(&mut self, world: &mut super::World) {
+    fn update(&mut self, _world_read: &World, _world: &mut World, _idx: usize) {
         
     }
 }

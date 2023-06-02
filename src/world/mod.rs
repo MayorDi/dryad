@@ -66,10 +66,12 @@ impl World {
     }
 }
 
+/// Getting the segment position by its index.
 pub fn get_pos(index: usize, width: usize) -> (usize, usize) {
     (index % width, index / width)
 }
 
+/// Getting the segment index by its position.
 pub fn get_index(x: usize, y: usize, width: usize) -> usize {
     y * width + x
 }
@@ -78,14 +80,13 @@ pub trait Position {
     fn get_position(&self) -> Vector2<usize>;
 }
 
+/// Trait for simple behavior.
 pub trait Behaviour {
-    fn update(&mut self, world: &mut World);
+    fn update(&mut self, world_read: &World, world: &mut World, idx: usize);
 }
 
 // oh no...
-pub fn get_idx_neighbors<T: Position>(segment: &T) -> (
-    (usize, usize), (usize, usize), [usize; 4]
-) {
+pub fn get_idx_neighbors<T: Position>(segment: &T) -> [usize; 4] {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
     let (x, y) = (segment.get_position().x, segment.get_position().y);
 
@@ -97,7 +98,7 @@ pub fn get_idx_neighbors<T: Position>(segment: &T) -> (
         get_index(x, limit(0.0, height as f32 - 1.0, y as f32 - 1.0) as usize, width),
     );
 
-    ((x, y), (width, height), [left_idx, right_idx, top_idx, bottom_idx])
+    [left_idx, right_idx, top_idx, bottom_idx]
 }
 
 pub fn limit(min: f32, max: f32, n: f32) -> f32 {

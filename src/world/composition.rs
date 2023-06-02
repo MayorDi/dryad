@@ -1,9 +1,9 @@
-//! `composition` - модуль хранит основное описания составных особенностей сегментов мира.
+//! `composition` - the module stores the general features of the segments.
 
 use crate::color::Color;
 
-/// `Chemical` определяет основной химический состав сегмента мира. <br>
-/// В полях нет определённых единиц исчисления.
+/// `Chemical` defines the basic chemical composition of a segment of the world. <br>
+/// There are no specific units of calculus in the fields.
 #[derive(Debug, Default, Clone, Copy, PartialEq)]
 pub struct Chemical {
     pub water: f32,
@@ -16,7 +16,7 @@ pub struct Chemical {
     pub nitrites: f32,
 }
 
-/// `Physical` определяет физические особенности сегмента мира.
+/// `Physical` defines the physical features of a segment of the world.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Physical {
     pub light: f32,

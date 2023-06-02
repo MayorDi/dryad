@@ -38,9 +38,9 @@ impl App {
             self.sdl.canvas.set_draw_color(BACKGROUND.to_bytes());
             self.sdl.canvas.clear();
 
-            let world_read = self.world.clone();
+            let mut world_read = self.world.clone();
             for idx in 0..world_read.segments.iter().len() {
-                self.update(&world_read, idx);
+                self.update(&mut world_read, idx);
                 App::render(&world_read, &mut self.sdl, idx);
             }
     

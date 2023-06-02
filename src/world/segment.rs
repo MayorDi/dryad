@@ -1,6 +1,6 @@
 use super::{Block, Cell, Position, Air };
 
-/// `Segment` является основой построения мира, осуществляя разделение сегментов на типы.
+/// `Segment` is the basis for building the world by dividing segments into types.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Segment {
     Air(Air),
@@ -9,8 +9,8 @@ pub enum Segment {
 }
 
 impl Segment {
-    /// Используется когда точно известно, что за объект. <br>
-    /// Нужен, когда есть проблема с множеством `mut` ссылок.
+    /// It is used when it is known exactly what the object is. <br>
+    /// It is needed when there is a problem with a lot of `mut` links.
     pub fn to_block(&mut self) -> &mut Block {
         if let Segment::Dirt(block) = self {
             return block;
@@ -19,8 +19,8 @@ impl Segment {
         panic!("Error: unable to convert block.");
     }
 
-    /// Используется когда точно известно, что за объект. <br>
-    /// Нужен, когда есть проблема с множеством `mut` ссылок.
+    /// It is used when it is known exactly what the object is. <br>
+    /// It is needed when there is a problem with a lot of `mut` links.
     pub fn to_cell(&mut self) -> &mut Cell {
         if let Segment::Cell(cell) = self {
             return cell;
