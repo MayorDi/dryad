@@ -9,6 +9,7 @@ pub mod update;
 pub use render::*;
 pub use update::*;
 pub use sdl::*;
+
 use sdl2::{event::Event, keyboard::Keycode};
 
 pub struct App {
@@ -20,11 +21,11 @@ pub struct App {
 impl App {
     pub fn init() -> Self {
         let mut world = World::new();
-        world.generate();
-
         let settings = Settings::default();
         let sdl = SDL::init(&settings);
-
+        
+        world.generate();
+        
         Self {
             world,
             settings,
@@ -37,8 +38,11 @@ impl App {
             self.sdl.canvas.set_draw_color(BACKGROUND.to_bytes());
             self.sdl.canvas.clear();
 
-            self.update();
-            self.render();
+            let world_read = self.world.clone();
+            for idx in 0..world_read.segments.iter().len() {
+                self.update(idx);
+                App::render(&world_read, &mut self.sdl, idx);
+            }
     
             if self.event_handler() { break 'running; }
 

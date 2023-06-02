@@ -28,7 +28,7 @@ pub struct World {
 
 impl World {
     pub fn new() -> Self {
-        let mut segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS].into_boxed_slice();
+        let segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS].into_boxed_slice();
 
         Self {
             segments,

@@ -1,6 +1,6 @@
 use nalgebra::Vector2;
 
-use crate::constants::colors::SKYBLUE;
+use crate::constants::colors::COLOR_SKYBLUE;
 
 use super::{Physical, Position};
 
@@ -14,7 +14,7 @@ impl Air {
     pub fn new(position: Vector2<usize>) -> Self {
         Self {
             position,
-            physical: Physical { light: 1.0, color: SKYBLUE }
+            physical: Physical { light: 1.0, color: COLOR_SKYBLUE }
         }
     }
 }
