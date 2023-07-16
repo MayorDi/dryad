@@ -8,7 +8,7 @@ mod composition;
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::constants::colors::*;
+use crate::{constants::colors::*, app::SDL};
 pub use crate::constants::world::*;
 
 pub use block::*;
@@ -82,7 +82,11 @@ pub trait Position {
 
 /// Trait for simple behavior.
 pub trait Behaviour {
-    fn update(&mut self, world_read: &World, world: &mut World, idx: usize);
+    fn update(&mut self, world_read: &World, world: &mut World);
+}
+
+pub trait Render {
+    fn render(&self, sdl: &mut SDL);
 }
 
 // oh no...

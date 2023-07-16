@@ -1,25 +1,22 @@
-use crate::world::{World, Segment, Behaviour};
+use crate::world::{World, Segment::*, Behaviour};
 
 use super::App;
 
 impl App {
-    pub fn update(&mut self, world_read: &mut World, idx: usize) {
-        match world_read.segments[idx] {
-            Segment::Cell(_) => {
-                let mut cell = self.world.segments[idx].to_cell().clone();
-                cell.update(world_read, &mut self.world, idx);
-
-                self.world.segments[idx] = Segment::Cell(cell);
+    pub fn update(&mut self, world_read: &World) {
+        for idx in 0..self.world.segments.len() {
+            if let Cell(cell) = &self.world.segments[idx] {
+                let mut cell = cell.clone();
+                cell.update(world_read, &mut self.world);
+    
+                self.world.segments[idx] = Cell(cell);
+                
+            } else if let Dirt(block) = &self.world.segments[idx] {
+                let mut block = block.clone();
+                block.update(world_read, &mut self.world);
+    
+                self.world.segments[idx] = Dirt(block);
             }
-
-            Segment::Dirt(_) => {
-                let mut block = self.world.segments[idx].to_block().clone();
-                block.update(world_read, &mut self.world, idx);
-
-                self.world.segments[idx] = Segment::Dirt(block);
-            }
-            
-            _ => {}
         }
     }
 }

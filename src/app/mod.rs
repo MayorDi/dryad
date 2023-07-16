@@ -34,21 +34,21 @@ impl App {
     }
 
     pub fn run(&mut self) {
+        let stop_frame = Duration::new(0, 1_000_000_000u32 / crate::constants::app::FPS);
+
         'running: loop {
-            self.sdl.canvas.set_draw_color(BACKGROUND.to_bytes());
+            self.sdl.canvas.set_draw_color(BACKGROUND);
             self.sdl.canvas.clear();
 
-            let mut world_read = self.world.clone();
-            for idx in 0..world_read.segments.iter().len() {
-                self.update(&mut world_read, idx);
-                App::render(&world_read, &mut self.sdl, idx);
-            }
+            let world_read = self.world.clone();
+            self.update(&world_read);
+            App::render(&world_read, &mut self.sdl);
     
             if self.event_handler() { break 'running; }
 
             self.sdl.canvas.present();
     
-            ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / crate::constants::app::FPS));
+            ::std::thread::sleep(stop_frame);
         }
     }
 

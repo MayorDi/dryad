@@ -20,8 +20,8 @@ impl Position for Block {
 }
 
 impl Behaviour for Block {
-    fn update(&mut self, world_read: &World, world: &mut World, idx: usize) {
-        let neighbors = get_idx_neighbors(&world_read.segments[idx]);
+    fn update(&mut self, world_read: &World, world: &mut World) {
+        let neighbors = get_idx_neighbors(self);
         let wtr = 50.0;
 
         for j in 0..4 {
