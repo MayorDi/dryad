@@ -14,7 +14,7 @@ pub struct Cell {
     pub physical: Physical,
 
     pub type_cell: TypeCell,
-    pub children: [usize; 4],
+    pub children: [usize; 5],
 
     pub step: usize,
     pub genome: Genome,
@@ -73,7 +73,7 @@ impl Cell {
             chemical,
             physical,
             type_cell,
-            children: [1, 0, 0, 0],
+            children: [1, 0, 0, 0, 0],
             step: 1,
             genome: Genome::default()
         }
@@ -92,6 +92,7 @@ impl Cell {
                 }
 
                 gene.children = [
+                    rand::thread_rng().gen_range(0..COUNT_GENES),
                     rand::thread_rng().gen_range(0..COUNT_GENES),
                     rand::thread_rng().gen_range(0..COUNT_GENES),
                     rand::thread_rng().gen_range(0..COUNT_GENES),
@@ -130,7 +131,7 @@ impl Default for Cell {
             chemical: Chemical::default(),
             physical: Physical::default(),
             type_cell: TypeCell::default(),
-            children: [0; 4],
+            children: [0; 5],
             step: 0,
             genome: Genome([Gene::default(); COUNT_GENES])
         }

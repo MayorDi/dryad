@@ -15,59 +15,57 @@ use sdl2::{event::Event, keyboard::Keycode};
 pub struct App {
     pub world: World,
     pub settings: Settings,
-    pub sdl: SDL
 }
 
 impl App {
     pub fn init() -> Self {
         let mut world = World::new();
         let settings = Settings::default();
-        let sdl = SDL::init(&settings);
         
         world.generate();
         
         Self {
             world,
             settings,
-            sdl,
         }
     }
 
     pub fn run(&mut self) {
         let stop_frame = Duration::new(0, 1_000_000_000u32 / crate::constants::app::FPS);
+        let mut sdl = SDL::init(&self.settings);
 
         'running: loop {
-            self.sdl.canvas.set_draw_color(BACKGROUND);
-            self.sdl.canvas.clear();
+            sdl.canvas.set_draw_color(BACKGROUND);
+            sdl.canvas.clear();
+    
+            if event_handler(&sdl) { break 'running; }
 
             let world_read = self.world.clone();
             self.update(&world_read);
-            App::render(&world_read, &mut self.sdl);
-    
-            if self.event_handler() { break 'running; }
+            App::render(&world_read, &mut sdl);
 
-            self.sdl.canvas.present();
-    
+            sdl.canvas.present();
+
             ::std::thread::sleep(stop_frame);
         }
     }
+}
 
-    fn event_handler(&self) -> bool {
-        let mut event_pump = self.sdl.sdl_context.event_pump().unwrap();
+pub(self) fn event_handler(sdl: &SDL) -> bool {
+    let mut event_pump = sdl.sdl_context.event_pump().unwrap();
 
-        for event in event_pump.poll_iter() {
-            match event {
-                Event::Quit { .. }
-                | Event::KeyDown {
-                    keycode: Some(Keycode::Escape),
-                    ..
-                } => return true,
-                _ => {}
-            }
+    for event in event_pump.poll_iter() {
+        match event {
+            Event::Quit { .. }
+            | Event::KeyDown {
+                keycode: Some(Keycode::Escape),
+                ..
+            } => return true,
+            _ => {}
         }
-
-        false
     }
+
+    false
 }
 
 pub struct Settings {

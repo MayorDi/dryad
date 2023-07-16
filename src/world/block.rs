@@ -24,19 +24,24 @@ impl Behaviour for Block {
         let neighbors = get_idx_neighbors(self);
         let wtr = 50.0;
 
-        for j in 0..4 {
-            if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[j]] {
-                if self.chemical.water > neighbor.chemical.water
-                    && 400.0 > world.segments[neighbors[j]].to_block().chemical.water
-                {
+        for i in 0..neighbors.len() {
+            if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[i]] {
+                if is_needs_water(&self, neighbor){
                     let cof = self.chemical.water / 500.0;
 
-                    self.chemical.water -= wtr * cof;
-                    world.segments[neighbors[j]].to_block().chemical.water += wtr * cof;
+                    if let Segment::Dirt(neighbor) = &mut world.segments[neighbors[i]] {
+                        self.chemical.water -= wtr * cof;
+                        neighbor.chemical.water += wtr * cof;
+                    }
                 }
             }
         }
 
         self.physical.color = COLOR_DIRT * (1.0 - self.chemical.water / 500.0);
     }
+}
+
+pub(self) fn is_needs_water(block: &Block, neighbor: &Block) -> bool {
+    block.chemical.water > neighbor.chemical.water && 
+    neighbor.chemical.water < 400.0
 }

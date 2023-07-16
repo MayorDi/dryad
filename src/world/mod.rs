@@ -59,7 +59,6 @@ impl World {
                 *segment = Segment::Dirt(dirt);
             }
         }
-
         let cell = Cell::new(Vector2::new(128, 25), TypeCell::Producer, rand::thread_rng().gen_range(0..1000000));
 
         self.segments[get_index(128, 25, SIZE_WORLD[0])] = Segment::Cell(cell);
@@ -67,12 +66,12 @@ impl World {
 }
 
 /// Getting the segment position by its index.
-pub fn get_pos(index: usize, width: usize) -> (usize, usize) {
+pub const fn get_pos(index: usize, width: usize) -> (usize, usize) {
     (index % width, index / width)
 }
 
 /// Getting the segment index by its position.
-pub fn get_index(x: usize, y: usize, width: usize) -> usize {
+pub const fn get_index(x: usize, y: usize, width: usize) -> usize {
     y * width + x
 }
 
@@ -90,26 +89,32 @@ pub trait Render {
 }
 
 // oh no...
-pub fn get_idx_neighbors<T: Position>(segment: &T) -> [usize; 4] {
+pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
     let (x, y) = (segment.get_position().x, segment.get_position().y);
+    let idx = get_index(x, y, width);
 
     // idx of neighbors
-    let (left_idx, right_idx, top_idx, bottom_idx) = (
+    let idxes = [
         get_index(limit(0.0, width as f32 - 1.0, x as f32 - 1.0) as usize, y, width),
         get_index(limit(0.0, width as f32 - 1.0, x as f32 + 1.0) as usize, y, width),
-        get_index(x, limit(0.0, height as f32 - 1.0, y as f32 + 1.0) as usize, width),
         get_index(x, limit(0.0, height as f32 - 1.0, y as f32 - 1.0) as usize, width),
-    );
+        get_index(x, limit(0.0, height as f32 - 1.0, y as f32 + 1.0) as usize, width),
+    ];
 
-    [left_idx, right_idx, top_idx, bottom_idx]
+    idxes.iter()
+        .filter(|i| **i != idx)
+        .collect::<Vec<&usize>>()
+        .iter()
+        .map(|e| **e)
+        .collect::<Vec<usize>>()
 }
 
 pub fn limit(min: f32, max: f32, n: f32) -> f32 {
     if n < min {
-        return min;
-    } else if n > max {
         return max;
+    } else if n > max {
+        return min;
     }
 
     n

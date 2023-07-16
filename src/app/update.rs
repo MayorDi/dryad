@@ -4,19 +4,19 @@ use super::App;
 
 impl App {
     pub fn update(&mut self, world_read: &World) {
-        for idx in 0..self.world.segments.len() {
-            if let Cell(cell) = &self.world.segments[idx] {
+        for i in 0..self.world.segments.len() {
+            if let Cell(cell) = &self.world.segments[i] {
                 let mut cell = cell.clone();
                 cell.update(world_read, &mut self.world);
     
-                self.world.segments[idx] = Cell(cell);
+                self.world.segments[i] = Cell(cell);
                 
-            } else if let Dirt(block) = &self.world.segments[idx] {
+            } else if let Dirt(block) = &self.world.segments[i] {
                 let mut block = block.clone();
                 block.update(world_read, &mut self.world);
     
-                self.world.segments[idx] = Dirt(block);
+                self.world.segments[i] = Dirt(block);
             }
-        }
+        };
     }
 }
