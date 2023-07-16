@@ -6,10 +6,7 @@ impl App {
     pub fn update(&mut self, world_read: &World) {
         for i in 0..self.world.segments.len() {
             if let Cell(cell) = &self.world.segments[i] {
-                let mut cell = cell.clone();
-                cell.update(world_read, &mut self.world);
-    
-                self.world.segments[i] = Cell(cell);
+                cell.clone().update(world_read, &mut self.world);
                 
             } else if let Dirt(block) = &self.world.segments[i] {
                 let mut block = block.clone();

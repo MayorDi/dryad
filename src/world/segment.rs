@@ -1,4 +1,4 @@
-use super::{Block, Cell, Position, Air };
+use super::{Block, Cell, Position, Air, VectorWrapper };
 
 /// `Segment` is the basis for building the world by dividing segments into types.
 #[derive(Debug, Clone, PartialEq)]
@@ -31,7 +31,7 @@ impl Segment {
 }
 
 impl Position for Segment {
-    fn get_position(&self) -> nalgebra::Vector2<usize> {
+    fn get_position(&self) -> VectorWrapper<usize> {
         match self {
             Segment::Cell(cell) => cell.get_position(),
             Segment::Dirt(block) => block.get_position(),

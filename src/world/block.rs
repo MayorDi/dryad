@@ -2,7 +2,7 @@ use nalgebra::Vector2;
 
 use crate::constants::colors::*;
 
-use super::{Behaviour, Chemical, Physical, Position, World, Segment, get_idx_neighbors};
+use super::{Behaviour, Chemical, Physical, Position, World, Segment, get_idx_neighbors, VectorWrapper};
 
 /// `Block` represents the solid base of the grid, mainly acts as the soil.
 /// It supplies plants with nutrients.
@@ -14,8 +14,8 @@ pub struct Block {
 }
 
 impl Position for Block {
-    fn get_position(&self) -> Vector2<usize> {
-        self.position
+    fn get_position(&self) -> VectorWrapper<usize> {
+        VectorWrapper(self.position)
     }
 }
 

@@ -2,7 +2,7 @@ use nalgebra::Vector2;
 
 use crate::constants::colors::COLOR_SKYBLUE;
 
-use super::{Physical, Position};
+use super::{Physical, Position, VectorWrapper};
 
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct Air {
@@ -20,7 +20,7 @@ impl Air {
 }
 
 impl Position for Air {
-    fn get_position(&self) -> Vector2<usize> {
-        self.position
+    fn get_position(&self) -> VectorWrapper<usize> {
+        VectorWrapper(self.position)
     }
 }

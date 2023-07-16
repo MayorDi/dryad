@@ -1,10 +1,12 @@
+use std::borrow::BorrowMut;
+
 use nalgebra::Vector2;
 use rand::Rng;
 
-use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position, Behaviour, World};
+use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position, Behaviour, World, Segment, get_index, SIZE_WORLD, limit, get_pos, VectorWrapper};
 
 /// `Cell` is the main working unit in which most of all processes take place.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Cell {
     pub id: usize,
     pub lifetime: usize,
@@ -111,14 +113,25 @@ impl Cell {
 }
 
 impl Position for Cell {
-    fn get_position(&self) -> Vector2<usize> {
-        self.position
+    fn get_position(&self) -> VectorWrapper<usize> {
+        VectorWrapper(self.position)
     }
 }
 
 impl Behaviour for Cell {
-    fn update(&mut self, _world_read: &World, _world: &mut World) {
-        
+    fn update(&mut self, world_read: &World, world: &mut World) {
+        if let TypeCell::Producer = self.type_cell {
+            let (x, y) = self.get_position().into();
+            let idx = self.get_index();
+            let idx_botton_n = get_index(x, y - 1, SIZE_WORLD[0]);
+
+            if let Segment::Air(air) = world_read.segments[idx_botton_n].clone() {
+                self.position.y -= 1;
+
+                world.segments[idx_botton_n] = Segment::Cell(*self);
+                world.segments[idx] = Segment::Air(air);
+            }
+        }
     }
 }
 

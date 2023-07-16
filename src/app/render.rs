@@ -22,8 +22,7 @@ impl App {
 
 impl Render for Air {
     fn render(&self, sdl: &mut SDL) {
-        let pos = self.get_position();
-        let (x, y) = (pos.x, pos.y);
+        let (x, y) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
             x as i32 * SIZE_RECT,
@@ -40,8 +39,7 @@ impl Render for Air {
 
 impl Render for Cell {
     fn render(&self, sdl: &mut crate::app::SDL) {
-        let pos = self.get_position();
-        let (x, y) = (pos.x, pos.y);
+        let (x, y) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
             x as i32 * SIZE_RECT,
@@ -64,8 +62,7 @@ impl Render for Cell {
 
 impl Render for Block {
     fn render(&self, sdl: &mut SDL) {
-        let pos = self.get_position();
-        let (x, y) = (pos.x, pos.y);
+        let (x, y) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
             x as i32 * SIZE_RECT,

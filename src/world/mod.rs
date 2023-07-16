@@ -5,7 +5,7 @@ mod air;
 mod genome;
 mod composition;
 
-use nalgebra::Vector2;
+use nalgebra::{Vector2, ArrayStorage, Matrix, U2, U1};
 use rand::Rng;
 
 use crate::{constants::colors::*, app::SDL};
@@ -38,7 +38,7 @@ impl World {
 
     pub fn generate(&mut self) {
         for (i, segment) in self.segments.iter_mut().enumerate() {
-            let (x, y) = get_pos(i, SIZE_WORLD[0]);
+            let (x, y) = get_pos(i, SIZE_WORLD[0]).into();
 
             *segment = Segment::Air(Air::new(Vector2::new(x, y)));
 
@@ -66,8 +66,8 @@ impl World {
 }
 
 /// Getting the segment position by its index.
-pub const fn get_pos(index: usize, width: usize) -> (usize, usize) {
-    (index % width, index / width)
+pub const fn get_pos(index: usize, width: usize) -> VectorWrapper<usize> {
+    VectorWrapper(Vector2::new(index % width, index / width))
 }
 
 /// Getting the segment index by its position.
@@ -76,7 +76,19 @@ pub const fn get_index(x: usize, y: usize, width: usize) -> usize {
 }
 
 pub trait Position {
-    fn get_position(&self) -> Vector2<usize>;
+    fn get_position(&self) -> VectorWrapper<usize>;
+    fn get_index(&self) -> usize {
+        let (x, y) = self.get_position().into();
+        get_index(x, y, SIZE_WORLD[0])
+    }
+}
+
+pub struct VectorWrapper<T>(pub Matrix<T, U2, U1, ArrayStorage<T, 2, 1>>);
+
+impl Into<(usize, usize)> for VectorWrapper<usize> {
+    fn into(self) -> (usize, usize) {
+        (self.0.x, self.0.y)
+    }
 }
 
 /// Trait for simple behavior.
@@ -91,10 +103,8 @@ pub trait Render {
 // oh no...
 pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
-    let (x, y) = (segment.get_position().x, segment.get_position().y);
-    let idx = get_index(x, y, width);
+    let (x, y) = segment.get_position().into();
 
-    // idx of neighbors
     let idxes = [
         get_index(limit(0.0, width as f32 - 1.0, x as f32 - 1.0) as usize, y, width),
         get_index(limit(0.0, width as f32 - 1.0, x as f32 + 1.0) as usize, y, width),
@@ -102,12 +112,7 @@ pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
         get_index(x, limit(0.0, height as f32 - 1.0, y as f32 + 1.0) as usize, width),
     ];
 
-    idxes.iter()
-        .filter(|i| **i != idx)
-        .collect::<Vec<&usize>>()
-        .iter()
-        .map(|e| **e)
-        .collect::<Vec<usize>>()
+    idxes.to_vec()
 }
 
 pub fn limit(min: f32, max: f32, n: f32) -> f32 {
