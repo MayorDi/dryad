@@ -8,7 +8,7 @@ mod composition;
 use nalgebra::{Vector2, ArrayStorage, Matrix, U2, U1};
 use rand::Rng;
 
-use crate::{constants::colors::*, app::SDL};
+use crate::{constants::colors::*, app::SDL, traits::Position};
 pub use crate::constants::world::*;
 
 pub use block::*;
@@ -75,29 +75,12 @@ pub const fn get_index(x: usize, y: usize, width: usize) -> usize {
     y * width + x
 }
 
-pub trait Position {
-    fn get_position(&self) -> VectorWrapper<usize>;
-    fn get_index(&self) -> usize {
-        let (x, y) = self.get_position().into();
-        get_index(x, y, SIZE_WORLD[0])
-    }
-}
-
 pub struct VectorWrapper<T>(pub Matrix<T, U2, U1, ArrayStorage<T, 2, 1>>);
 
 impl Into<(usize, usize)> for VectorWrapper<usize> {
     fn into(self) -> (usize, usize) {
         (self.0.x, self.0.y)
     }
-}
-
-/// Trait for simple behavior.
-pub trait Behaviour {
-    fn update(&mut self, world_read: &World, world: &mut World);
-}
-
-pub trait Render {
-    fn render(&self, sdl: &mut SDL);
 }
 
 // oh no...

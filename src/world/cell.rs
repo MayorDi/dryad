@@ -1,9 +1,9 @@
-use std::borrow::BorrowMut;
-
 use nalgebra::Vector2;
 use rand::Rng;
 
-use super::{Genome, Physical, Chemical, Gene, COUNT_GENES, Position, Behaviour, World, Segment, get_index, SIZE_WORLD, limit, get_pos, VectorWrapper};
+use crate::traits::Behaviour;
+
+use super::*;
 
 /// `Cell` is the main working unit in which most of all processes take place.
 #[derive(Debug, Clone, Copy, PartialEq)]

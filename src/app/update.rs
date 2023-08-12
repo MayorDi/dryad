@@ -1,4 +1,4 @@
-use crate::world::{World, Segment::*, Behaviour};
+use crate::{world::{ Segment::*, World }, traits::Behaviour};
 
 use super::App;
 

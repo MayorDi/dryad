@@ -1,32 +1,42 @@
-use super::{Block, Cell, Position, Air, VectorWrapper };
+use crate::traits::*;
+
+use super::{Block, Cell, Air, VectorWrapper };
 
 /// `Segment` is the basis for building the world by dividing segments into types.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Segment {
     Air(Air),
     Dirt(Block),
     Cell(Cell)
 }
 
-impl Segment {
-    /// It is used when it is known exactly what the object is. <br>
-    /// It is needed when there is a problem with a lot of `mut` links.
-    pub fn to_block(&mut self) -> &mut Block {
-        if let Segment::Dirt(block) = self {
-            return block;
+impl ToAir for Segment {
+    fn to_air(self) -> Result<Air, ()> {
+        if let Segment::Air(air) = self {
+            return Ok(air);
         }
 
-        panic!("Error: unable to convert block.");
+        Err(())
     }
+}
 
-    /// It is used when it is known exactly what the object is. <br>
-    /// It is needed when there is a problem with a lot of `mut` links.
-    pub fn to_cell(&mut self) -> &mut Cell {
-        if let Segment::Cell(cell) = self {
-            return cell;
+impl ToBlock for Segment {
+    fn to_block(self) -> Result<Block, ()> {
+        if let Segment::Dirt(block) = self {
+            return Ok(block);
         }
 
-        panic!("Error: unable to convert cell.");
+        Err(())
+    }
+}
+
+impl ToCell for Segment {
+    fn to_cell(self) -> Result<Cell, ()> {
+        if let Segment::Cell(cell) = self {
+            return Ok(cell);
+        }
+
+        Err(())
     }
 }
 

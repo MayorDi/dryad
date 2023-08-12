@@ -1,12 +1,12 @@
 use nalgebra::Vector2;
 
-use crate::constants::colors::*;
+use crate::{constants::colors::*, traits::Behaviour};
 
-use super::{Behaviour, Chemical, Physical, Position, World, Segment, get_idx_neighbors, VectorWrapper};
+use super::*;
 
 /// `Block` represents the solid base of the grid, mainly acts as the soil.
 /// It supplies plants with nutrients.
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, Copy,PartialEq)]
 pub struct Block {
     pub position: Vector2<usize>,
     pub chemical: Chemical,

@@ -3,7 +3,7 @@ use sdl2::rect::Rect;
 use super::{App, SDL};
 use crate::{
     constants::{colors::*, world::SIZE_WORLD},
-    world::*,
+    world::*, traits::{Render, Position},
 };
 
 const SIZE_RECT: i32 = 5;
