@@ -5,6 +5,9 @@ pub trait ToBlock {
     /// Returns `Ok(Block)` if the conversion was successful.
     ///
     /// ```
+    /// use dryad::world::{Segment, Block};
+    /// use dryad::traits::ToBlock;
+    /// 
     /// let segment = Segment::Dirt(Block::default());
     /// let block = segment.to_block().unwrap();
     /// ```
@@ -16,7 +19,10 @@ pub trait ToCell {
     /// Returns `Ok(Cell)` if the conversion was successful.
     ///
     /// ```
-    /// let segment = Segment::Dirt(Cell::default());
+    /// use dryad::world::{Segment, Cell};
+    /// use dryad::traits::ToCell;
+    /// 
+    /// let segment = Segment::Cell(Cell::default());
     /// let cell = segment.to_cell().unwrap();
     /// ```
     fn to_cell(self) -> Result<Cell, ()>;
@@ -27,7 +33,10 @@ pub trait ToAir {
     /// Returns `Ok(Air)` if the conversion was successful.
     ///
     /// ```
-    /// let segment = Segment::Dirt(Air::default());
+    /// use dryad::world::{Segment, Air};
+    /// use dryad::traits::ToAir;
+    /// 
+    /// let segment = Segment::Air(Air::default());
     /// let air = segment.to_air().unwrap();
     /// ```
     fn to_air(self) -> Result<Air, ()>;

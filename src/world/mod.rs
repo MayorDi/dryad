@@ -38,6 +38,8 @@ impl World {
     }
 
     pub fn generate(&mut self) {
+        log::info!(target: "world_generate", "The process of generating the world has begun.");
+
         for (i, segment) in self.segments.iter_mut().enumerate() {
             let (x, y) = get_pos(i, SIZE_WORLD[0]).into();
 
@@ -62,6 +64,7 @@ impl World {
                 *segment = Segment::Dirt(dirt);
             }
         }
+
         let cell = Cell::new(
             Vector2::new(128, 25),
             TypeCell::Producer,
@@ -69,6 +72,8 @@ impl World {
         );
 
         self.segments[get_index(128, 25, SIZE_WORLD[0])] = Segment::Cell(cell);
+
+        log::info!(target: "world_generate", "The world has been successfully generated.");
     }
 }
 

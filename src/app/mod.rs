@@ -19,18 +19,23 @@ pub struct App {
 
 impl App {
     pub fn init() -> Self {
+        log::info!(target: "app", "Create and init app.");
         let mut world = World::new();
         let settings = Settings::default();
 
         world.generate();
 
+        log::info!(target: "app", "The creation and initialization of the application was successful.");
         Self { world, settings }
     }
 
     pub fn run(&mut self) {
+        log::info!(target: "app_run", "Launching the application.");
+
         let stop_frame = Duration::new(0, 1_000_000_000u32 / crate::constants::app::FPS);
         let mut sdl = SDL::init(&self.settings);
 
+        log::info!(target: "app_run", "Starting the main application cycle.");
         'running: loop {
             sdl.canvas.set_draw_color(BACKGROUND);
             sdl.canvas.clear();
@@ -47,6 +52,8 @@ impl App {
 
             ::std::thread::sleep(stop_frame);
         }
+
+        log::info!(target: "app_run", "Shutting down the application.");
     }
 }
 
@@ -54,6 +61,8 @@ pub(self) fn event_handler(sdl: &SDL) -> bool {
     let mut event_pump = sdl.sdl_context.event_pump().unwrap();
 
     for event in event_pump.poll_iter() {
+        log::trace!(target: "app_event", "{:?}", event);
+
         match event {
             Event::Quit { .. }
             | Event::KeyDown {

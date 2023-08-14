@@ -7,6 +7,8 @@ pub struct SDL {
 
 impl SDL {
     pub fn init(settings: &Settings) -> Self {
+        log::info!(target: "SDL", "Initialization of SDL.");
+
         let sdl_ctx = sdl2::init().expect("Error init SDL.");
         let video_subsystem = sdl_ctx.video().expect("Error init video_subsystem.");
         let window = video_subsystem
@@ -20,6 +22,7 @@ impl SDL {
 
         let canvas = window.into_canvas().build().expect("Error init canvas");
 
+        log::info!(target: "SDL", "Initialization of SDL is complete.");
         Self {
             sdl_context: sdl_ctx.clone(),
             canvas,
