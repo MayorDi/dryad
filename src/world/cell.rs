@@ -1,7 +1,7 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::traits::{Behaviour, Mutation};
+use crate::traits::{Behaviour, Mutation, Glucose};
 
 use super::*;
 
@@ -70,14 +70,41 @@ impl Cell {
             genome: Genome::default(),
         }
     }
+}
 
-    pub fn synthesize_glucose(&mut self, light: f32) {
+impl Default for Cell {
+    fn default() -> Self {
+        Self {
+            id: 0,
+            lifetime: 0,
+            position: Vector2::new(0, 0),
+            chemical: Chemical::default(),
+            physical: Physical::default(),
+            type_cell: TypeCell::default(),
+            children: [0; 5],
+            step: 0,
+            genome: Genome([Gene::default(); COUNT_GENES]),
+        }
+    }
+}
+
+impl Glucose for Cell {
+    fn synthesize_glucose(&mut self, light: f32) {
         if self.chemical.glucose + 8.0 * light * 0.2 < 200.0 {
             self.chemical.water -= 8.0;
             self.chemical.glucose += 8.0 * light * 0.2;
         }
     }
+
+    fn get_glucose(&self) -> f32 {
+        self.chemical.glucose
+    }
+
+    fn set_glucose(&mut self, value: f32) {
+        self.chemical.glucose = value;
+    }
 }
+
 
 impl Mutation for Cell {
     fn mutate(&mut self) {
@@ -133,22 +160,6 @@ impl Behaviour for Cell {
 
                 *self = new_cell;
             }
-        }
-    }
-}
-
-impl Default for Cell {
-    fn default() -> Self {
-        Self {
-            id: 0,
-            lifetime: 0,
-            position: Vector2::new(0, 0),
-            chemical: Chemical::default(),
-            physical: Physical::default(),
-            type_cell: TypeCell::default(),
-            children: [0; 5],
-            step: 0,
-            genome: Genome([Gene::default(); COUNT_GENES]),
         }
     }
 }

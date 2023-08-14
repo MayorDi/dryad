@@ -32,3 +32,10 @@ pub trait Position {
 pub trait Mutation {
     fn mutate(&mut self);
 }
+
+pub trait Glucose {
+    fn synthesize_glucose(&mut self, light: f32);
+    fn get_glucose(&self) -> f32;
+    fn set_glucose(&mut self, value: f32);
+    fn glucose_to_energy(&mut self) {}
+}
