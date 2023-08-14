@@ -127,12 +127,3 @@ pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
 
     idxes.to_vec()
 }
-pub fn limit(min: f32, max: f32, n: f32) -> f32 {
-    if n < min {
-        return max;
-    } else if n > max {
-        return min;
-    }
-
-    n
-}
