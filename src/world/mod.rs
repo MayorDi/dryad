@@ -96,7 +96,7 @@ impl Into<(i32, i32)> for VectorWrapper<usize> {
     }
 }
 
-pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
+pub fn get_idx_neighbors<T: Position>(segment: &T) -> [usize; 4] {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
     let (x, y): (i32, i32) = segment.get_position().into();
     let (w_max, h_max) = (width as i32 - 1, height as i32 - 1);
@@ -124,5 +124,5 @@ pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
         ),
     ];
 
-    idxes.to_vec()
+    idxes
 }
