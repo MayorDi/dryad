@@ -2,7 +2,7 @@ use crate::world::TypeCell;
 
 pub use crate::constants::genome::*;
 
-/// `Genome` хранит в себе набор типов, которые должны преобрести клетки при делении.
+/// `Genome` stores a set of types that cells should acquire during division.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Genome(pub [Gene; COUNT_GENES]);
 
@@ -42,7 +42,7 @@ impl Default for Genome {
     }
 }
 
-/// `Gene` хранит индивидуальный приобретаемый набор свойств для клетки.
+/// `Gene` stores an individual acquired set of properties for a cell.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct Gene {
     pub type_cell: TypeCell,
