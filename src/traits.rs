@@ -28,3 +28,7 @@ pub trait Position {
         get_index(x, y, SIZE_WORLD[0])
     }
 }
+
+pub trait Mutation {
+    fn mutate(&mut self);
+}

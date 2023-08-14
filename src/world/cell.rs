@@ -1,7 +1,7 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::traits::Behaviour;
+use crate::traits::{Behaviour, Mutation};
 
 use super::*;
 
@@ -71,7 +71,16 @@ impl Cell {
         }
     }
 
-    pub fn mutate(&mut self) {
+    pub fn synthesize_glucose(&mut self, light: f32) {
+        if self.chemical.glucose + 8.0 * light * 0.2 < 200.0 {
+            self.chemical.water -= 8.0;
+            self.chemical.glucose += 8.0 * light * 0.2;
+        }
+    }
+}
+
+impl Mutation for Cell {
+    fn mutate(&mut self) {
         if rand::thread_rng().gen_range(0.0..1.0) < 0.05 {
             for gene in self.genome.0.iter_mut() {
                 match rand::thread_rng().gen_range(0..10) {
@@ -91,13 +100,6 @@ impl Cell {
                     rand::thread_rng().gen_range(0..COUNT_GENES),
                 ];
             }
-        }
-    }
-
-    pub fn synthesize_glucose(&mut self, light: f32) {
-        if self.chemical.glucose + 8.0 * light * 0.2 < 200.0 {
-            self.chemical.water -= 8.0;
-            self.chemical.glucose += 8.0 * light * 0.2;
         }
     }
 }
