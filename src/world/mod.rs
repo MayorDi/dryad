@@ -1,38 +1,39 @@
-mod block;
-mod segment;
-mod cell;
 mod air;
-mod genome;
+mod block;
+mod cell;
 mod composition;
+mod genome;
+mod segment;
 
-use nalgebra::{Vector2, ArrayStorage, Matrix, U2, U1};
+use nalgebra::{ArrayStorage, Matrix, Vector2, U1, U2};
 use rand::Rng;
 
-use crate::{constants::colors::*, app::SDL, traits::Position};
 pub use crate::constants::world::*;
+use crate::{constants::colors::*, traits::Position};
 
-pub use block::*;
 pub use air::*;
-pub use segment::*;
+pub use block::*;
 pub use cell::*;
-pub use genome::*;
 pub use composition::*;
+pub use genome::*;
+pub use segment::*;
 
 type Segments = Box<[Segment]>;
 
 #[derive(Debug, Clone)]
 pub struct World {
     pub segments: Segments,
-    pub light: f32
+    pub light: f32,
 }
 
 impl World {
     pub fn new() -> Self {
-        let segments: Segments = vec![Segment::Air(Air::default()); COUNT_SEGMENTS].into_boxed_slice();
+        let segments: Segments =
+            vec![Segment::Air(Air::default()); COUNT_SEGMENTS].into_boxed_slice();
 
         Self {
             segments,
-            light: 100.0
+            light: 100.0,
         }
     }
 
@@ -49,7 +50,9 @@ impl World {
                 dirt.chemical.metals = 200.0;
                 dirt.chemical.water = rand::thread_rng().gen_range(150.0..350.0);
 
-                if y > 18 { dirt.chemical.water = 500.0; }
+                if y > 18 {
+                    dirt.chemical.water = 500.0;
+                }
 
                 dirt.chemical.nitrates = 60.0;
                 dirt.chemical.nitrites = 10.0;
@@ -59,7 +62,11 @@ impl World {
                 *segment = Segment::Dirt(dirt);
             }
         }
-        let cell = Cell::new(Vector2::new(128, 25), TypeCell::Producer, rand::thread_rng().gen_range(0..1000000));
+        let cell = Cell::new(
+            Vector2::new(128, 25),
+            TypeCell::Producer,
+            rand::thread_rng().gen_range(0..1000000),
+        );
 
         self.segments[get_index(128, 25, SIZE_WORLD[0])] = Segment::Cell(cell);
     }
@@ -83,21 +90,43 @@ impl Into<(usize, usize)> for VectorWrapper<usize> {
     }
 }
 
+impl Into<(i32, i32)> for VectorWrapper<usize> {
+    fn into(self) -> (i32, i32) {
+        (self.0.x as i32, self.0.y as i32)
+    }
+}
+
 // oh no...
 pub fn get_idx_neighbors<T: Position>(segment: &T) -> Vec<usize> {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
-    let (x, y) = segment.get_position().into();
+    let (x, y): (i32, i32) = segment.get_position().into();
+    let (w_max, h_max) = (width as i32 - 1, height as i32 - 1);
 
     let idxes = [
-        get_index(limit(0.0, width as f32 - 1.0, x as f32 - 1.0) as usize, y, width),
-        get_index(limit(0.0, width as f32 - 1.0, x as f32 + 1.0) as usize, y, width),
-        get_index(x, limit(0.0, height as f32 - 1.0, y as f32 - 1.0) as usize, width),
-        get_index(x, limit(0.0, height as f32 - 1.0, y as f32 + 1.0) as usize, width),
+        get_index(
+            (((x - 1 % w_max) + w_max) % w_max) as usize,
+            y as usize,
+            width,
+        ),
+        get_index(
+            (((x + 1 % w_max) + w_max) % w_max) as usize,
+            y as usize,
+            width,
+        ),
+        get_index(
+            x as usize,
+            (((y - 1 % h_max) + h_max) % h_max) as usize,
+            width,
+        ),
+        get_index(
+            x as usize,
+            (((y + 1 % h_max) + h_max) % h_max) as usize,
+            width,
+        ),
     ];
 
     idxes.to_vec()
 }
-
 pub fn limit(min: f32, max: f32, n: f32) -> f32 {
     if n < min {
         return max;

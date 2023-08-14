@@ -1,4 +1,4 @@
-use crate::{world::*, app::SDL};
+use crate::{app::SDL, world::*};
 
 pub trait ToBlock {
     fn to_block(self) -> Result<Block, ()>;

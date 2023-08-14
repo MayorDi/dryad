@@ -2,7 +2,7 @@ use super::Settings;
 
 pub struct SDL {
     pub sdl_context: sdl2::Sdl,
-    pub canvas: sdl2::render::Canvas<sdl2::video::Window>
+    pub canvas: sdl2::render::Canvas<sdl2::video::Window>,
 }
 
 impl SDL {
@@ -15,13 +15,14 @@ impl SDL {
             .resizable()
             .opengl()
             .build()
-            .map_err(|e| e.to_string()).expect("Error init window.");
+            .map_err(|e| e.to_string())
+            .expect("Error init window.");
 
         let canvas = window.into_canvas().build().expect("Error init canvas");
 
         Self {
             sdl_context: sdl_ctx.clone(),
-            canvas
+            canvas,
         }
     }
 }

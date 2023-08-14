@@ -1,14 +1,14 @@
 use std::time::Duration;
 
-use crate::{world::World, constants::colors::BACKGROUND};
+use crate::{constants::colors::BACKGROUND, world::World};
 
-pub mod sdl;
 pub mod render;
+pub mod sdl;
 pub mod update;
 
 pub use render::*;
-pub use update::*;
 pub use sdl::*;
+pub use update::*;
 
 use sdl2::{event::Event, keyboard::Keycode};
 
@@ -21,13 +21,10 @@ impl App {
     pub fn init() -> Self {
         let mut world = World::new();
         let settings = Settings::default();
-        
+
         world.generate();
-        
-        Self {
-            world,
-            settings,
-        }
+
+        Self { world, settings }
     }
 
     pub fn run(&mut self) {
@@ -37,8 +34,10 @@ impl App {
         'running: loop {
             sdl.canvas.set_draw_color(BACKGROUND);
             sdl.canvas.clear();
-    
-            if event_handler(&sdl) { break 'running; }
+
+            if event_handler(&sdl) {
+                break 'running;
+            }
 
             let world_read = self.world.clone();
             self.update(&world_read);
@@ -77,7 +76,7 @@ impl Default for Settings {
     fn default() -> Self {
         Self {
             title: String::from("Dryad"),
-            size: (1200, 600)
+            size: (1200, 600),
         }
     }
 }

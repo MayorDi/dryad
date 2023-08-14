@@ -6,7 +6,7 @@ pub struct Chemical {
     pub metals: f32,
     pub nitrates: f32,
     pub nitrites: f32,
-    
-// ======== organic ========
+
+    // ======== organic ========
     pub glucose: f32,
 }

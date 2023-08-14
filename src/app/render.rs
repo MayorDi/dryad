@@ -3,7 +3,8 @@ use sdl2::rect::Rect;
 use super::{App, SDL};
 use crate::{
     constants::{colors::*, world::SIZE_WORLD},
-    world::*, traits::{Render, Position},
+    traits::{Position, Render},
+    world::*,
 };
 
 const SIZE_RECT: i32 = 5;
@@ -14,7 +15,7 @@ impl App {
             match &segment {
                 Segment::Air(air) => air.render(sdl),
                 Segment::Cell(cell) => cell.render(sdl),
-                Segment::Dirt(block) => block.render(sdl)
+                Segment::Dirt(block) => block.render(sdl),
             }
         }
     }
@@ -22,11 +23,11 @@ impl App {
 
 impl Render for Air {
     fn render(&self, sdl: &mut SDL) {
-        let (x, y) = self.get_position().into();
+        let (x, y): (i32, i32) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
-            x as i32 * SIZE_RECT,
-            SIZE_RECT * (-(y as i32) + SIZE_WORLD[1] as i32 - 1),
+            x * SIZE_RECT,
+            SIZE_RECT * (-y + SIZE_WORLD[1] as i32 - 1),
             SIZE_RECT as u32,
             SIZE_RECT as u32,
         );
@@ -36,14 +37,13 @@ impl Render for Air {
     }
 }
 
-
 impl Render for Cell {
     fn render(&self, sdl: &mut crate::app::SDL) {
-        let (x, y) = self.get_position().into();
+        let (x, y): (i32, i32) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
-            x as i32 * SIZE_RECT,
-            SIZE_RECT * (-(y as i32) + SIZE_WORLD[1] as i32 - 1),
+            x * SIZE_RECT,
+            SIZE_RECT * (-y + SIZE_WORLD[1] as i32 - 1),
             SIZE_RECT as u32,
             SIZE_RECT as u32,
         );
@@ -62,17 +62,16 @@ impl Render for Cell {
 
 impl Render for Block {
     fn render(&self, sdl: &mut SDL) {
-        let (x, y) = self.get_position().into();
+        let (x, y): (i32, i32) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
-            x as i32 * SIZE_RECT,
-            SIZE_RECT * (-(y as i32) + SIZE_WORLD[1] as i32 - 1),
+            x * SIZE_RECT,
+            SIZE_RECT * (-y + SIZE_WORLD[1] as i32 - 1),
             SIZE_RECT as u32,
             SIZE_RECT as u32,
         );
-        
+
         canvas.set_draw_color(self.physical.color);
         canvas.fill_rect(rect).unwrap();
     }
 }
-

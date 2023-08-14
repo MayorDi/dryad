@@ -46,23 +46,23 @@ impl Cell {
             glucose: 300.0,
             metals: 1.0,
             nitrates: 10.0,
-            nitrites: 1.0
+            nitrites: 1.0,
         };
 
         let mut physical = Physical::default();
         match type_cell {
-            TypeCell::Builder => { 
+            TypeCell::Builder => {
                 physical.light = 0.5;
-            },
-            TypeCell::Conductor => { 
+            }
+            TypeCell::Conductor => {
                 physical.light = 0.2;
-            },
+            }
             TypeCell::Consumer => {
                 physical.light = 0.3;
-            },
+            }
             TypeCell::Photosynthetic => {
                 physical.light = 0.8;
-            },
+            }
             TypeCell::Producer => {
                 physical.light = 0.1;
             }
@@ -77,7 +77,7 @@ impl Cell {
             type_cell,
             children: [1, 0, 0, 0, 0],
             step: 1,
-            genome: Genome::default()
+            genome: Genome::default(),
         }
     }
 
@@ -125,11 +125,21 @@ impl Behaviour for Cell {
             let idx = self.get_index();
             let idx_botton_n = get_index(x, y - 1, SIZE_WORLD[0]);
 
-            if let Segment::Air(air) = world_read.segments[idx_botton_n].clone() {
+            if let Segment::Air(air) = world_read.segments[idx_botton_n] {
                 self.position.y -= 1;
 
                 world.segments[idx_botton_n] = Segment::Cell(*self);
                 world.segments[idx] = Segment::Air(air);
+            }
+
+            if let Segment::Dirt(_) = world_read.segments[idx_botton_n] {
+                let mut new_cell = *self;
+                let gene = self.genome.0[self.children[0]];
+
+                new_cell.children = gene.children;
+                new_cell.type_cell = gene.type_cell;
+
+                *self = new_cell;
             }
         }
     }
@@ -146,7 +156,7 @@ impl Default for Cell {
             type_cell: TypeCell::default(),
             children: [0; 5],
             step: 0,
-            genome: Genome([Gene::default(); COUNT_GENES])
+            genome: Genome([Gene::default(); COUNT_GENES]),
         }
     }
 }

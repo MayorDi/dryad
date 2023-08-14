@@ -7,7 +7,6 @@ pub use crate::constants::genome::*;
 pub struct Genome(pub [Gene; COUNT_GENES]);
 
 impl Default for Genome {
-
     // 1 ----+ <-+
     //       |   |
     // 2-+ <-+   |
@@ -47,23 +46,28 @@ impl Default for Genome {
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct Gene {
     pub type_cell: TypeCell,
-    
+
     /// \[self, left, right, top, botton\]
     pub children: [usize; 5],
 }
 
 impl Gene {
     pub fn new(type_cell: TypeCell, children: [usize; 5]) -> Self {
-        Self { type_cell, children }
+        Self {
+            type_cell,
+            children,
+        }
     }
 
     pub fn get_count_active_division(&self) -> u8 {
         let mut count = 0;
 
         self.children.map(|i| {
-            if i != 0 { count += 1; }
+            if i != 0 {
+                count += 1;
+            }
         });
-        
+
         count
     }
 }

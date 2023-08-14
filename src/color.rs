@@ -7,7 +7,7 @@ pub struct Color {
     pub r: f32,
     pub g: f32,
     pub b: f32,
-    pub a: f32
+    pub a: f32,
 }
 
 impl std::ops::Mul<f32> for Color {
@@ -30,7 +30,7 @@ impl From<[f32; 4]> for Color {
             r: value[0],
             g: value[1],
             b: value[2],
-            a: value[3]
+            a: value[3],
         }
     }
 }
@@ -59,11 +59,6 @@ impl Into<pixels::Color> for Color {
 
 impl Color {
     pub fn new(r: f32, g: f32, b: f32, a: f32) -> Self {
-        Self {
-            r,
-            g,
-            b,
-            a
-        }
+        Self { r, g, b, a }
     }
 }

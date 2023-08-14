@@ -6,7 +6,7 @@ use super::*;
 
 /// `Block` represents the solid base of the grid, mainly acts as the soil.
 /// It supplies plants with nutrients.
-#[derive(Debug, Default, Clone, Copy,PartialEq)]
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
 pub struct Block {
     pub position: Vector2<usize>,
     pub chemical: Chemical,
@@ -26,7 +26,7 @@ impl Behaviour for Block {
 
         for i in 0..neighbors.len() {
             if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[i]] {
-                if is_needs_water(&self, neighbor){
+                if is_needs_water(&self, neighbor) {
                     let cof = self.chemical.water / 500.0;
 
                     if let Segment::Dirt(neighbor) = &mut world.segments[neighbors[i]] {
@@ -42,6 +42,5 @@ impl Behaviour for Block {
 }
 
 pub(self) fn is_needs_water(block: &Block, neighbor: &Block) -> bool {
-    block.chemical.water > neighbor.chemical.water && 
-    neighbor.chemical.water < 400.0
+    block.chemical.water > neighbor.chemical.water && neighbor.chemical.water < 400.0
 }

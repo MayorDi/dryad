@@ -14,7 +14,10 @@ impl Air {
     pub fn new(position: Vector2<usize>) -> Self {
         Self {
             position,
-            physical: Physical { light: 1.0, color: COLOR_SKYBLUE }
+            physical: Physical {
+                light: 1.0,
+                color: COLOR_SKYBLUE,
+            },
         }
     }
 }
