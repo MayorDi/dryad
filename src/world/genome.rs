@@ -62,11 +62,11 @@ impl Gene {
     pub fn get_count_active_division(&self) -> u8 {
         let mut count = 0;
 
-        self.children.map(|i| 
+        self.children.map(|i| {
             if i != 0 {
                 count += 1;
             }
-        );
+        });
 
         count
     }

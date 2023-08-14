@@ -1,7 +1,7 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::traits::{Behaviour, Mutation, Glucose};
+use crate::traits::{Behaviour, Glucose, Mutation};
 
 use super::*;
 
@@ -104,7 +104,6 @@ impl Glucose for Cell {
         self.chemical.glucose = value;
     }
 }
-
 
 impl Mutation for Cell {
     fn mutate(&mut self) {
