@@ -51,21 +51,11 @@ impl Cell {
 
         let mut physical = Physical::default();
         match type_cell {
-            TypeCell::Builder => {
-                physical.light = 0.5;
-            }
-            TypeCell::Conductor => {
-                physical.light = 0.2;
-            }
-            TypeCell::Consumer => {
-                physical.light = 0.3;
-            }
-            TypeCell::Photosynthetic => {
-                physical.light = 0.8;
-            }
-            TypeCell::Producer => {
-                physical.light = 0.1;
-            }
+            TypeCell::Builder => physical.light = 0.5,
+            TypeCell::Conductor => physical.light = 0.2,
+            TypeCell::Consumer => physical.light = 0.3,
+            TypeCell::Photosynthetic => physical.light = 0.8,
+            TypeCell::Producer => physical.light = 0.1,
         }
 
         Self {
