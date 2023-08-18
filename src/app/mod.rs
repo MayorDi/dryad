@@ -50,6 +50,10 @@ impl App {
 
             sdl.canvas.present();
 
+            if cfg!(test) {
+                break 'running;
+            }
+
             ::std::thread::sleep(stop_frame);
         }
 

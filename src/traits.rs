@@ -43,18 +43,17 @@ pub trait ToAir {
 }
 
 /// Trait for simple behavior.
-/// 
-/// ```
-/// use dryad::world::{ World, Segment, Block };
-/// use dryad::traits::{ ToBlock, Behaviour };
-/// 
-/// let mut world = World::new();
-/// let world_read = world.clone();
-/// 
-/// let segment: Segment = Segment::Dirt(Block::default());
-/// segment.to_block().unwrap().update(&world_read, &mut world);
-/// ```
 pub trait Behaviour {
+    /// ```
+    /// use dryad::world::{ World, Segment, Block };
+    /// use dryad::traits::{ ToBlock, Behaviour };
+    /// 
+    /// let mut world = World::new();
+    /// let world_read = world.clone();
+    /// 
+    /// let segment: Segment = Segment::Dirt(Block::default());
+    /// segment.to_block().unwrap().update(&world_read, &mut world);
+    /// ```
     fn update(&mut self, world_read: &World, world: &mut World);
 }
 
