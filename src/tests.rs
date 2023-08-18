@@ -1,6 +1,6 @@
 #![cfg(test)]
 
-use crate::{world::*, app::App};
+use crate::{app::App, world::*};
 
 #[test]
 fn generate_world() {

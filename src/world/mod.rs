@@ -96,7 +96,8 @@ pub const fn get_index(x: usize, y: usize, width: usize) -> usize {
 /// Vector's wrapper for more convenient conversion.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct VectorWrapper<T>(pub Matrix<T, U2, U1, ArrayStorage<T, 2, 1>>)
-where T: Clone+Copy+Debug+'static;
+where
+    T: Clone + Copy + Debug + 'static;
 
 impl From<(usize, usize)> for VectorWrapper<usize> {
     fn from(value: (usize, usize)) -> Self {
