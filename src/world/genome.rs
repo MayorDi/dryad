@@ -59,6 +59,7 @@ impl Gene {
         }
     }
 
+    /// Get all children other than 0.
     pub fn get_count_active_division(&self) -> u8 {
         let mut count = 0;
 

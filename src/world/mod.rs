@@ -5,6 +5,8 @@ mod composition;
 mod genome;
 mod segment;
 
+use std::fmt::Debug;
+
 use nalgebra::{ArrayStorage, Matrix, Vector2, U1, U2};
 use rand::Rng;
 
@@ -37,14 +39,17 @@ impl World {
         }
     }
 
+    /// To create a world.
     pub fn generate(&mut self) {
         log::info!(target: "world_generate", "The process of generating the world has begun.");
 
+        // Create sements for grid.
         for (i, segment) in self.segments.iter_mut().enumerate() {
             let (x, y) = get_pos(i, SIZE_WORLD[0]).into();
 
             *segment = Segment::Air(Air::new(Vector2::new(x, y)));
 
+            // Create dirt.
             if y < 20 {
                 let mut dirt = Block::default();
                 dirt.position = Vector2::new(x, y);
@@ -65,6 +70,7 @@ impl World {
             }
         }
 
+        // Add cell.
         let cell = Cell::new(
             Vector2::new(128, 25),
             TypeCell::Producer,
@@ -87,7 +93,22 @@ pub const fn get_index(x: usize, y: usize, width: usize) -> usize {
     y * width + x
 }
 
-pub struct VectorWrapper<T>(pub Matrix<T, U2, U1, ArrayStorage<T, 2, 1>>);
+/// Vector's wrapper for more convenient conversion.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct VectorWrapper<T>(pub Matrix<T, U2, U1, ArrayStorage<T, 2, 1>>)
+where T: Clone+Copy+Debug+'static;
+
+impl From<(usize, usize)> for VectorWrapper<usize> {
+    fn from(value: (usize, usize)) -> Self {
+        VectorWrapper(Vector2::new(value.0, value.1))
+    }
+}
+
+impl From<(i32, i32)> for VectorWrapper<usize> {
+    fn from(value: (i32, i32)) -> Self {
+        VectorWrapper(Vector2::new(value.0 as usize, value.1 as usize))
+    }
+}
 
 impl Into<(usize, usize)> for VectorWrapper<usize> {
     fn into(self) -> (usize, usize) {
@@ -101,6 +122,7 @@ impl Into<(i32, i32)> for VectorWrapper<usize> {
     }
 }
 
+/// Get adjoining cells near segment of grid.
 pub fn get_idx_neighbors<T: Position>(segment: &T) -> [usize; 4] {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
     let (x, y): (i32, i32) = segment.get_position().into();
