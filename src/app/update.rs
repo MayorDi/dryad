@@ -21,7 +21,7 @@ impl App {
                     self.world.segments[i] = Dirt(block);
                 }
 
-                Air(_) => {}
+                _ => {}
             }
         }
     }
