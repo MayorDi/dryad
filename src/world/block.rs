@@ -24,5 +24,5 @@ impl Behaviour for Block {
 }
 
 pub(self) fn _is_needs_water(block: &Block, neighbor: &Block) -> bool {
-    (block.chemical.water > neighbor.chemical.water) && (neighbor.chemical.water < 400000)
+    (block.chemical.water > neighbor.chemical.water) && (neighbor.chemical.water < 400.0)
 }

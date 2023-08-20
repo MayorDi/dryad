@@ -132,9 +132,9 @@ pub trait Glucose {
     /// cell.set_glucose(10.0);
     /// let val = cell.get_glucose();
     ///
-    /// assert_eq!(10, val);
+    /// assert_eq!(10.0, val);
     /// ```
-    fn get_glucose(&self) -> u32;
+    fn get_glucose(&self) -> f32;
 
     /// ```
     /// use dryad::world::{ Cell, TypeCell, VectorWrapper };
@@ -143,12 +143,12 @@ pub trait Glucose {
     ///
     /// let mut cell: Cell = Cell::new(Vector2::new(10, 2), TypeCell::default(), 1);
     ///
-    /// cell.set_glucose(10);
+    /// cell.set_glucose(10.0);
     /// let val = cell.get_glucose();
     ///
-    /// assert_eq!(10, val);
+    /// assert_eq!(10.0, val);
     /// ```
-    fn set_glucose(&mut self, value: u32);
+    fn set_glucose(&mut self, value: f32);
 
     fn glucose_to_energy(&mut self) {}
 }

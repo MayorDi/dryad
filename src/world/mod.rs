@@ -54,15 +54,15 @@ impl World {
                 let mut dirt = Block::default();
                 dirt.position = Vector2::new(x, y);
 
-                dirt.chemical.metals = 200_000;
-                dirt.chemical.water = rand::thread_rng().gen_range(150_000..350_000);
+                dirt.chemical.metals = 200.0;
+                dirt.chemical.water = rand::thread_rng().gen_range(150.0..350.0);
 
                 if y > 18 {
-                    dirt.chemical.water = 500_000;
+                    dirt.chemical.water = 500.0;
                 }
 
-                dirt.chemical.nitrates = 60_000;
-                dirt.chemical.nitrites = 10_000;
+                dirt.chemical.nitrates = 60.0;
+                dirt.chemical.nitrites = 10.0;
 
                 dirt.physical.color = COLOR_DIRT;
 
