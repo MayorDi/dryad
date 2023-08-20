@@ -3,7 +3,7 @@ use crate::world::TypeCell;
 pub use crate::constants::genome::*;
 
 /// `Genome` stores a set of types that cells should acquire during division.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Genome(pub [Gene; COUNT_GENES]);
 
 impl Default for Genome {

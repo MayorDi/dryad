@@ -3,7 +3,7 @@ use crate::traits::*;
 use super::{Air, Block, Cell, VectorWrapper};
 
 /// `Segment` is the basis for building the world by dividing segments into types.
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Segment {
     Air(Air),
     Dirt(Block),

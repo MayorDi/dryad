@@ -2,11 +2,11 @@
 /// There are no specific units of calculus in the fields.
 #[derive(Debug, Default, Clone, Copy, PartialEq)]
 pub struct Chemical {
-    pub water: f32,
-    pub metals: f32,
-    pub nitrates: f32,
-    pub nitrites: f32,
+    pub water: u32,    // 1mg
+    pub metals: u32,   // 1mg
+    pub nitrates: u32, // 1mg
+    pub nitrites: u32, // 1mg
 
     // ======== organic ========
-    pub glucose: f32,
+    pub glucose: u32, // 1mg
 }

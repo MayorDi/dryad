@@ -6,7 +6,7 @@ use crate::traits::{Behaviour, Glucose, Mutation};
 use super::*;
 
 /// `Cell` is the main working unit in which most of all processes take place.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Cell {
     pub id: usize,
     pub lifetime: usize,
@@ -42,11 +42,11 @@ pub enum TypeCell {
 impl Cell {
     pub fn new(position: Vector2<usize>, type_cell: TypeCell, id: usize) -> Self {
         let chemical = Chemical {
-            water: 100.0,
-            glucose: 300.0,
-            metals: 1.0,
-            nitrates: 10.0,
-            nitrites: 1.0,
+            water: 100000,
+            glucose: 300000,
+            metals: 1000,
+            nitrates: 10000,
+            nitrites: 1000,
         };
 
         let mut physical = Physical::default();
@@ -89,18 +89,13 @@ impl Default for Cell {
 }
 
 impl Glucose for Cell {
-    fn synthesize_glucose(&mut self, light: f32) {
-        if self.chemical.glucose + 8.0 * light * 0.2 < 200.0 {
-            self.chemical.water -= 8.0;
-            self.chemical.glucose += 8.0 * light * 0.2;
-        }
-    }
+    fn synthesize_glucose(&mut self, _light: f32) {}
 
-    fn get_glucose(&self) -> f32 {
+    fn get_glucose(&self) -> u32 {
         self.chemical.glucose
     }
 
-    fn set_glucose(&mut self, value: f32) {
+    fn set_glucose(&mut self, value: u32) {
         self.chemical.glucose = value;
     }
 }

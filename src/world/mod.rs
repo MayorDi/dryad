@@ -54,15 +54,15 @@ impl World {
                 let mut dirt = Block::default();
                 dirt.position = Vector2::new(x, y);
 
-                dirt.chemical.metals = 200.0;
-                dirt.chemical.water = rand::thread_rng().gen_range(150.0..350.0);
+                dirt.chemical.metals = 200_000;
+                dirt.chemical.water = rand::thread_rng().gen_range(150_000..350_000);
 
                 if y > 18 {
-                    dirt.chemical.water = 500.0;
+                    dirt.chemical.water = 500_000;
                 }
 
-                dirt.chemical.nitrates = 60.0;
-                dirt.chemical.nitrites = 10.0;
+                dirt.chemical.nitrates = 60_000;
+                dirt.chemical.nitrites = 10_000;
 
                 dirt.physical.color = COLOR_DIRT;
 
@@ -74,7 +74,7 @@ impl World {
         let cell = Cell::new(
             Vector2::new(128, 25),
             TypeCell::Producer,
-            rand::thread_rng().gen_range(0..1000000),
+            rand::thread_rng().gen_range(0..1_000_000),
         );
 
         self.segments[get_index(128, 25, SIZE_WORLD[0])] = Segment::Cell(cell);

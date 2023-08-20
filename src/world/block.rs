@@ -1,12 +1,12 @@
 use nalgebra::Vector2;
 
-use crate::{constants::colors::*, traits::Behaviour};
+use crate::traits::Behaviour;
 
 use super::*;
 
 /// `Block` represents the solid base of the grid, mainly acts as the soil.
 /// It supplies plants with nutrients.
-#[derive(Debug, Default, Clone, Copy, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq)]
 pub struct Block {
     pub position: Vector2<usize>,
     pub chemical: Chemical,
@@ -20,27 +20,9 @@ impl Position for Block {
 }
 
 impl Behaviour for Block {
-    fn update(&mut self, world_read: &World, world: &mut World) {
-        let neighbors = get_idx_neighbors(self);
-        let wtr = 5.0;
-
-        for i in 0..neighbors.len() {
-            if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[i]] {
-                if is_needs_water(&self, neighbor) {
-                    let cof = self.chemical.water / 500.0;
-
-                    if let Segment::Dirt(neighbor) = &mut world.segments[neighbors[i]] {
-                        self.chemical.water -= wtr * cof;
-                        neighbor.chemical.water += wtr * cof;
-                    }
-                }
-            }
-        }
-
-        self.physical.color = COLOR_DIRT * (1.0 - self.chemical.water / 500.0);
-    }
+    fn update(&mut self, _world_read: &World, _world: &mut World) {}
 }
 
-pub(self) fn is_needs_water(block: &Block, neighbor: &Block) -> bool {
-    (block.chemical.water > neighbor.chemical.water) && (neighbor.chemical.water < 400.0)
+pub(self) fn _is_needs_water(block: &Block, neighbor: &Block) -> bool {
+    (block.chemical.water > neighbor.chemical.water) && (neighbor.chemical.water < 400000)
 }

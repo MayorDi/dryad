@@ -4,7 +4,7 @@ use crate::constants::colors::COLOR_SKYBLUE;
 
 use super::{Physical, Position, VectorWrapper};
 
-#[derive(Debug, Default, Clone, Copy, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq)]
 pub struct Air {
     pub position: Vector2<usize>,
     pub physical: Physical,
