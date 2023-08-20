@@ -130,26 +130,10 @@ pub fn get_idx_neighbors<T: Position>(segment: &T) -> [usize; 4] {
     let (w_max, h_max) = (width as i32, height as i32);
 
     let idxes = [
-        get_index(
-            limit(0, w_max, x - 1),
-            y as usize,
-            width,
-        ),
-        get_index(
-            limit(0, w_max, x + 1),
-            y as usize,
-            width,
-        ),
-        get_index(
-            x as usize,
-            limit(0, h_max, y + 1),
-            width,
-        ),
-        get_index(
-            x as usize,
-            limit(0, h_max, y - 1),
-            width,
-        ),
+        get_index(limit(0, w_max, x - 1), y as usize, width),
+        get_index(limit(0, w_max, x + 1), y as usize, width),
+        get_index(x as usize, limit(0, h_max, y + 1), width),
+        get_index(x as usize, limit(0, h_max, y - 1), width),
     ];
 
     idxes
