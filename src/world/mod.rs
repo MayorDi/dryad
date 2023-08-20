@@ -127,30 +127,40 @@ impl Into<(i32, i32)> for VectorWrapper<usize> {
 pub fn get_idx_neighbors<T: Position>(segment: &T) -> [usize; 4] {
     let (width, height) = (SIZE_WORLD[0], SIZE_WORLD[1]);
     let (x, y): (i32, i32) = segment.get_position().into();
-    let (w_max, h_max) = (width as i32 - 1, height as i32 - 1);
+    let (w_max, h_max) = (width as i32, height as i32);
 
     let idxes = [
         get_index(
-            (((x - 1 % w_max) + w_max) % w_max) as usize,
+            limit(0, w_max, x - 1),
             y as usize,
             width,
         ),
         get_index(
-            (((x + 1 % w_max) + w_max) % w_max) as usize,
+            limit(0, w_max, x + 1),
             y as usize,
             width,
         ),
         get_index(
             x as usize,
-            (((y - 1 % h_max) + h_max) % h_max) as usize,
+            limit(0, h_max, y + 1),
             width,
         ),
         get_index(
             x as usize,
-            (((y + 1 % h_max) + h_max) % h_max) as usize,
+            limit(0, h_max, y - 1),
             width,
         ),
     ];
 
     idxes
+}
+
+fn limit(min: i32, max: i32, n: i32) -> usize {
+    if n < min {
+        return min as usize;
+    } else if n > max {
+        return max as usize;
+    }
+
+    n as usize
 }

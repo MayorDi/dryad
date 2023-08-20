@@ -1,6 +1,6 @@
 use crate::{
-    traits::Behaviour,
-    world::{Segment::*, World},
+    traits::{Behaviour, Position, ToCell},
+    world::{Segment::{*, self}, World, TypeCell, get_index}, constants::world::SIZE_WORLD,
 };
 
 use super::App;
@@ -8,11 +8,9 @@ use super::App;
 impl App {
     pub fn update(&mut self, world_read: &World) {
         for i in 0..self.world.segments.len() {
-            match self.world.segments[i] {
-                Cell(mut cell) => {
-                    cell.update(world_read, &mut self.world);
-
-                    self.world.segments[i] = Cell(cell);
+            match &mut self.world.segments[i] {
+                Cell(_) => {
+                    
                 }
 
                 Dirt(mut block) => {

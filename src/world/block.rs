@@ -22,7 +22,7 @@ impl Position for Block {
 impl Behaviour for Block {
     fn update(&mut self, world_read: &World, world: &mut World) {
         let neighbors = get_idx_neighbors(self);
-        let wtr = 50.0;
+        let wtr = 5.0;
 
         for i in 0..neighbors.len() {
             if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[i]] {
@@ -42,5 +42,5 @@ impl Behaviour for Block {
 }
 
 pub(self) fn is_needs_water(block: &Block, neighbor: &Block) -> bool {
-    block.chemical.water > neighbor.chemical.water && neighbor.chemical.water < 400.0
+    (block.chemical.water > neighbor.chemical.water) && (neighbor.chemical.water < 400.0)
 }

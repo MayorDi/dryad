@@ -138,27 +138,6 @@ impl Position for Cell {
 
 impl Behaviour for Cell {
     fn update(&mut self, world_read: &World, world: &mut World) {
-        if let TypeCell::Producer = self.type_cell {
-            let (x, y) = self.get_position().into();
-            let idx = self.get_index();
-            let idx_botton_n = get_index(x, y - 1, SIZE_WORLD[0]);
-
-            if let Segment::Air(air) = world_read.segments[idx_botton_n] {
-                self.position.y -= 1;
-
-                world.segments[idx_botton_n] = Segment::Cell(*self);
-                world.segments[idx] = Segment::Air(air);
-            }
-
-            if let Segment::Dirt(_) = world_read.segments[idx_botton_n] {
-                let mut new_cell = *self;
-                let gene = self.genome.0[self.children[0]];
-
-                new_cell.children = gene.children;
-                new_cell.type_cell = gene.type_cell;
-
-                *self = new_cell;
-            }
-        }
+        
     }
 }
