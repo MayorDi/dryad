@@ -132,5 +132,5 @@ impl Position for Cell {
 }
 
 impl Behaviour for Cell {
-    fn update(&mut self, _world_read: &World, _world: &mut World) {}
+    fn update(_world_read: &World, _world: &mut World, _idx_segment: usize) {}
 }

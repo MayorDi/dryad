@@ -21,7 +21,7 @@ impl ToAir for Segment {
 }
 
 impl ToBlock for Segment {
-    fn to_block(self) -> Result<Block, ()> {
+    fn to_block(&mut self) -> Result<&mut Block, ()> {
         if let Segment::Dirt(block) = self {
             return Ok(block);
         }

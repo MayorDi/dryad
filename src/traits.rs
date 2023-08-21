@@ -11,7 +11,7 @@ pub trait ToBlock {
     /// let segment = Segment::Dirt(Block::default());
     /// let block = segment.to_block().unwrap();
     /// ```
-    fn to_block(self) -> Result<Block, ()>;
+    fn to_block(&mut self) -> Result<&mut Block, ()>;
 }
 
 /// Turning a `Segment` into a specific type, to simplify the `if let` construction.
@@ -54,7 +54,7 @@ pub trait Behaviour {
     /// let segment: Segment = Segment::Dirt(Block::default());
     /// segment.to_block().unwrap().update(&world_read, &mut world);
     /// ```
-    fn update(&mut self, world_read: &World, world: &mut World);
+    fn update(world_read: &World, world: &mut World, idx_segment: usize);
 }
 
 /// Required for rendering implementation.
