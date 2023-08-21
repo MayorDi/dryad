@@ -1,7 +1,7 @@
 use nalgebra::Vector2;
 use rand::Rng;
 
-use crate::traits::{Behaviour, Glucose, Mutation};
+use crate::traits::{Behaviour, Glucose, Mutation, ToCell};
 
 use super::*;
 
@@ -132,5 +132,26 @@ impl Position for Cell {
 }
 
 impl Behaviour for Cell {
-    fn update(_world_read: &World, _world: &mut World, _idx_segment: usize) {}
+    fn update(world_read: &World, world: &mut World, idx_segment: usize) {
+        let cell = world.segments[idx_segment].to_cell().unwrap();
+
+        if let TypeCell::Producer = cell.type_cell {
+            let (x, y): (usize, usize) = cell.get_position().into();
+            let idx = idx_segment;
+            let idx_botton_n = get_index(x, y, SIZE_WORLD[0]);
+
+            if let Segment::Air(air) = &world_read.segments[idx_botton_n] {
+                cell.position.y -= 1;
+
+                let cell = cell.clone();
+                let air = air.clone();
+
+                world.segments[idx] = Segment::Air(air);
+                world.segments[idx_botton_n] = Segment::Cell(cell);
+
+            } else if let Segment::Dirt(_) = &world_read.segments[idx_botton_n] {
+                
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@ use sdl2::rect::Rect;
 
 use super::{App, SDL};
 use crate::{
-    constants::{colors::*, world::SIZE_WORLD},
+    constants::colors::*,
     traits::{Position, Render},
     world::*,
 };
@@ -21,13 +21,17 @@ impl App {
     }
 }
 
+fn f(y: i32) -> i32 {
+    y
+}
+
 impl Render for Air {
     fn render(&self, sdl: &mut SDL) {
         let (x, y): (i32, i32) = self.get_position().into();
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
             x * SIZE_RECT,
-            SIZE_RECT * (-y + SIZE_WORLD[1] as i32 - 1),
+            SIZE_RECT * f(y),
             SIZE_RECT as u32,
             SIZE_RECT as u32,
         );
@@ -43,7 +47,7 @@ impl Render for Cell {
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
             x * SIZE_RECT,
-            SIZE_RECT * (-y + SIZE_WORLD[1] as i32 - 1),
+            SIZE_RECT * f(y),
             SIZE_RECT as u32,
             SIZE_RECT as u32,
         );
@@ -66,7 +70,7 @@ impl Render for Block {
         let canvas = &mut sdl.canvas;
         let rect = Rect::new(
             x * SIZE_RECT,
-            SIZE_RECT * (-y + SIZE_WORLD[1] as i32 - 1),
+            SIZE_RECT * f(y),
             SIZE_RECT as u32,
             SIZE_RECT as u32,
         );

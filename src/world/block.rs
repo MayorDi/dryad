@@ -28,10 +28,10 @@ impl Behaviour for Block {
             if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[i]] {
                 if neighbors[i] == idx_segment { continue; }
 
-                let this = world.segments[idx_segment].to_block().unwrap();
-                if is_needs_water(&this, neighbor) {
+                let block = world.segments[idx_segment].to_block().unwrap();
+                if is_needs_water(&block, neighbor) {
                     if let Segment::Dirt(_) = &world_read.segments[neighbors[i]] {
-                        this.chemical.water -= wtr;
+                        block.chemical.water -= wtr;
                         world.segments[neighbors[i]]
                             .to_block()
                             .unwrap()
@@ -42,8 +42,8 @@ impl Behaviour for Block {
             }
         }
 
-        let this = world.segments[idx_segment].to_block().unwrap();
-        this.physical.color = COLOR_DIRT * (1.0 - this.chemical.water / 500.0);
+        let block = world.segments[idx_segment].to_block().unwrap();
+        block.physical.color = COLOR_DIRT * (1.0 - block.chemical.water / 500.0);
     }
 }
 
