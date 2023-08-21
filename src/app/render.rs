@@ -12,7 +12,7 @@ const SIZE_RECT: i32 = 5;
 impl App {
     pub fn render(world_read: &World, sdl: &mut SDL) {
         for segment in world_read.segments.iter() {
-            match &segment {
+            match segment {
                 Segment::Air(air) => air.render(sdl),
                 Segment::Cell(cell) => cell.render(sdl),
                 Segment::Dirt(block) => block.render(sdl),

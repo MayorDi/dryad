@@ -134,23 +134,21 @@ impl Position for Cell {
 impl Behaviour for Cell {
     fn update(world_read: &World, world: &mut World, idx_segment: usize) {
         let cell = world.segments[idx_segment].to_cell().unwrap();
+        let (x, y): (usize, usize) = cell.get_position().into();
+        let idx = idx_segment;
+        let idx_bottom = get_index(x, y - 1, SIZE_WORLD[0]);
 
         if let TypeCell::Producer = cell.type_cell {
-            let (x, y): (usize, usize) = cell.get_position().into();
-            let idx = idx_segment;
-            let idx_botton_n = get_index(x, y, SIZE_WORLD[0]);
+            if let Segment::Air(air) = &world_read.segments[idx_bottom] {
+                let mut cell = cell.clone();
+                let mut air = air.clone();
 
-            if let Segment::Air(air) = &world_read.segments[idx_botton_n] {
                 cell.position.y -= 1;
+                air.position.y += 1;
 
-                let cell = cell.clone();
-                let air = air.clone();
-
-                world.segments[idx] = Segment::Air(air);
-                world.segments[idx_botton_n] = Segment::Cell(cell);
-
-            } else if let Segment::Dirt(_) = &world_read.segments[idx_botton_n] {
-                
+                world.segments[idx_bottom] = Segment::Cell(cell);
+                world.segments[idx] = Segment::Air(Air::from(air));
+            } else if let Segment::Dirt(_) = &world_read.segments[idx_bottom] {
             }
         }
     }

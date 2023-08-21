@@ -1,14 +1,13 @@
 use crate::{
-    constants::world::COUNT_SEGMENTS,
     traits::Behaviour,
-    world::{Block, Segment, World, Cell},
+    world::{Block, Cell, Segment, World},
 };
 
 use super::App;
 
 impl App {
     pub fn update(&mut self, world_read: &World) {
-        for i in 0..COUNT_SEGMENTS {
+        for i in 0..world_read.segments.len() {
             match &world_read.segments[i] {
                 Segment::Dirt(_) => {
                     Block::update(world_read, &mut self.world, i);

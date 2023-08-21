@@ -2,7 +2,7 @@ use crate::{app::SDL, world::*};
 
 /// Turning a `Segment` into a specific type, to simplify the `if let` construction.
 pub trait ToBlock {
-    /// Returns `Ok(Block)` if the conversion was successful.
+    /// Returns `Ok(&mut Block)` if the conversion was successful.
     ///
     /// ```
     /// use dryad::world::{ Segment, Block };
@@ -16,7 +16,7 @@ pub trait ToBlock {
 
 /// Turning a `Segment` into a specific type, to simplify the `if let` construction.
 pub trait ToCell {
-    /// Returns `Ok(Cell)` if the conversion was successful.
+    /// Returns `Ok(&mut Cell)` if the conversion was successful.
     ///
     /// ```
     /// use dryad::world::{ Segment, Cell };
@@ -30,7 +30,7 @@ pub trait ToCell {
 
 /// Turning a `Segment` into a specific type, to simplify the `if let` construction.
 pub trait ToAir {
-    /// Returns `Ok(Air)` if the conversion was successful.
+    /// Returns `Ok(&mut Air)` if the conversion was successful.
     ///
     /// ```
     /// use dryad::world::{ Segment, Air };
@@ -51,10 +51,10 @@ pub trait Behaviour {
     /// let mut world = World::new();
     /// let world_read = world.clone();
     /// let idx = 0;
-    /// 
+    ///
     /// let segment: Segment = Segment::Dirt(Block::default());
     /// world.segments[0] = segment;
-    /// 
+    ///
     /// Block::update(&world_read, &mut world, idx);
     /// ```
     fn update(world_read: &World, world: &mut World, idx_segment: usize);

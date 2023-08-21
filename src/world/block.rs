@@ -26,7 +26,9 @@ impl Behaviour for Block {
 
         for i in 0..neighbors.len() {
             if let Segment::Dirt(neighbor) = &world_read.segments[neighbors[i]] {
-                if neighbors[i] == idx_segment { continue; }
+                if neighbors[i] == idx_segment {
+                    continue;
+                }
 
                 let block = world.segments[idx_segment].to_block().unwrap();
                 if is_needs_water(&block, neighbor) {
