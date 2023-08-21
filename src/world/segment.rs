@@ -11,7 +11,7 @@ pub enum Segment {
 }
 
 impl ToAir for Segment {
-    fn to_air(self) -> Result<Air, ()> {
+    fn to_air(&mut self) -> Result<&mut Air, ()> {
         if let Segment::Air(air) = self {
             return Ok(air);
         }
@@ -31,7 +31,7 @@ impl ToBlock for Segment {
 }
 
 impl ToCell for Segment {
-    fn to_cell(self) -> Result<Cell, ()> {
+    fn to_cell(&mut self) -> Result<&mut Cell, ()> {
         if let Segment::Cell(cell) = self {
             return Ok(cell);
         }

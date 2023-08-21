@@ -8,7 +8,7 @@ pub trait ToBlock {
     /// use dryad::world::{ Segment, Block };
     /// use dryad::traits::ToBlock;
     ///
-    /// let segment = Segment::Dirt(Block::default());
+    /// let mut segment = Segment::Dirt(Block::default());
     /// let block = segment.to_block().unwrap();
     /// ```
     fn to_block(&mut self) -> Result<&mut Block, ()>;
@@ -22,10 +22,10 @@ pub trait ToCell {
     /// use dryad::world::{ Segment, Cell };
     /// use dryad::traits::ToCell;
     ///
-    /// let segment = Segment::Cell(Cell::default());
+    /// let mut segment = Segment::Cell(Cell::default());
     /// let cell = segment.to_cell().unwrap();
     /// ```
-    fn to_cell(self) -> Result<Cell, ()>;
+    fn to_cell(&mut self) -> Result<&mut Cell, ()>;
 }
 
 /// Turning a `Segment` into a specific type, to simplify the `if let` construction.
@@ -36,10 +36,10 @@ pub trait ToAir {
     /// use dryad::world::{ Segment, Air };
     /// use dryad::traits::ToAir;
     ///
-    /// let segment = Segment::Air(Air::default());
+    /// let mut segment = Segment::Air(Air::default());
     /// let air = segment.to_air().unwrap();
     /// ```
-    fn to_air(self) -> Result<Air, ()>;
+    fn to_air(&mut self) -> Result<&mut Air, ()>;
 }
 
 /// Trait for simple behavior.
@@ -50,9 +50,12 @@ pub trait Behaviour {
     ///
     /// let mut world = World::new();
     /// let world_read = world.clone();
-    ///
+    /// let idx = 0;
+    /// 
     /// let segment: Segment = Segment::Dirt(Block::default());
-    /// segment.to_block().unwrap().update(&world_read, &mut world);
+    /// world.segments[0] = segment;
+    /// 
+    /// Block::update(&world_read, &mut world, idx);
     /// ```
     fn update(world_read: &World, world: &mut World, idx_segment: usize);
 }
