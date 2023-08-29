@@ -22,22 +22,22 @@ impl App {
 }
 
 fn f(y: i32) -> i32 {
-    y
+    -y + SIZE_WORLD[1] as i32 - 1
 }
 
 impl Render for Air {
-    fn render(&self, sdl: &mut SDL) {
-        let (x, y): (i32, i32) = self.get_position().into();
-        let canvas = &mut sdl.canvas;
-        let rect = Rect::new(
-            x * SIZE_RECT,
-            SIZE_RECT * f(y),
-            SIZE_RECT as u32,
-            SIZE_RECT as u32,
-        );
+    fn render(&self, _sdl: &mut SDL) {
+        // let (x, y): (i32, i32) = self.get_position().into();
+        // let canvas = &mut sdl.canvas;
+        // let rect = Rect::new(
+        //     x * SIZE_RECT,
+        //     SIZE_RECT * f(y),
+        //     SIZE_RECT as u32,
+        //     SIZE_RECT as u32,
+        // );
 
-        canvas.set_draw_color(self.physical.color);
-        canvas.fill_rect(rect).unwrap();
+        // canvas.set_draw_color(self.physical.color);
+        // canvas.fill_rect(rect).unwrap();
     }
 }
 

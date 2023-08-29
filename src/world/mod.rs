@@ -81,6 +81,13 @@ impl World {
 
         log::info!(target: "world_generate", "The world has been successfully generated.");
     }
+
+    pub fn get_segments_at(&self, idxs: Vec<usize>) -> Vec<Segment> {
+        idxs.iter()
+            .filter(|i| **i < COUNT_SEGMENTS)
+            .map(|i| self.segments[*i].clone())
+            .collect()
+    }
 }
 
 /// Getting the segment position by its index.
@@ -98,6 +105,12 @@ pub const fn get_index(x: usize, y: usize, width: usize) -> usize {
 pub struct VectorWrapper<T>(pub Matrix<T, U2, U1, ArrayStorage<T, 2, 1>>)
 where
     T: Clone + Copy + Debug + 'static;
+
+impl<T: Clone + Copy + Debug + 'static> VectorWrapper<T> {
+    pub fn unwrap(&self) -> Vector2<T> {
+        self.0
+    }
+}
 
 impl From<(usize, usize)> for VectorWrapper<usize> {
     fn from(value: (usize, usize)) -> Self {

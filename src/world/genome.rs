@@ -47,7 +47,7 @@ impl Default for Genome {
 pub struct Gene {
     pub type_cell: TypeCell,
 
-    /// \[self, left, right, top, botton\]
+    /// \[self, left, right, top, bottom\]
     pub children: [usize; 5],
 }
 

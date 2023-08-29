@@ -70,6 +70,36 @@ impl Cell {
             genome: Genome::default(),
         }
     }
+
+    pub fn share(&self) -> [Option<Cell>; 5] {
+        let genes: Vec<Option<Gene>> = self
+            .children
+            .iter()
+            .map(|ch| {
+                if *ch > 0 {
+                    return Some(self.genome.0[*ch]);
+                }
+
+                None
+            })
+            .collect();
+
+        let mut children: [Option<Cell>; 5] = [None, None, None, None, None];
+        for (idx, gene) in genes.iter().enumerate() {
+            match gene {
+                Some(gene) => {
+                    children[idx] = Some(Cell {
+                        children: gene.children,
+                        type_cell: gene.type_cell,
+                        ..self.clone()
+                    });
+                }
+                None => children[idx] = None,
+            }
+        }
+
+        children
+    }
 }
 
 impl Default for Cell {
@@ -136,20 +166,51 @@ impl Behaviour for Cell {
         let cell = world.segments[idx_segment].to_cell().unwrap();
         let (x, y): (usize, usize) = cell.get_position().into();
         let idx = idx_segment;
-        let idx_bottom = get_index(x, y - 1, SIZE_WORLD[0]);
+        match cell.type_cell {
+            TypeCell::Producer => {
+                let idx_bottom = get_index(x, y - 1, SIZE_WORLD[0]);
+                if let Segment::Air(air) = &world_read.segments[idx_bottom] {
+                    let mut cell = cell.clone();
+                    let mut air = air.clone();
 
-        if let TypeCell::Producer = cell.type_cell {
-            if let Segment::Air(air) = &world_read.segments[idx_bottom] {
-                let mut cell = cell.clone();
-                let mut air = air.clone();
+                    cell.position.y -= 1;
+                    air.position.y += 1;
 
-                cell.position.y -= 1;
-                air.position.y += 1;
+                    world.segments[idx_bottom] = Segment::Cell(cell);
+                    world.segments[idx] = Segment::Air(Air::from(air));
+                } else if let Segment::Dirt(_) = &world_read.segments[idx_bottom] {
+                    let mut new_cell = cell.clone();
+                    new_cell.mutate();
 
-                world.segments[idx_bottom] = Segment::Cell(cell);
-                world.segments[idx] = Segment::Air(Air::from(air));
-            } else if let Segment::Dirt(_) = &world_read.segments[idx_bottom] {
+                    let gene = cell.genome.0[cell.children[0]];
+
+                    new_cell.children = gene.children;
+                    new_cell.type_cell = gene.type_cell;
+
+                    world.segments[idx] = Segment::Cell(new_cell);
+                }
             }
+
+            TypeCell::Builder => {
+                let mut children = cell.share();
+                if let Some(child) = &mut children[0] {
+                    child.position = cell.position;
+                    world.segments[idx_segment] = Segment::Cell(child.clone());
+                }
+
+                let n = get_idx_neighbors(world.segments[idx_segment].to_cell().unwrap());
+
+                for (i, segment) in world_read.get_segments_at(n.to_vec()).iter().enumerate() {
+                    if let Segment::Air(_) = segment {
+                        if let Some(child) = &mut children[i + 1] {
+                            child.position = world.segments[n[i]].get_position().unwrap();
+                            world.segments[n[i]] = Segment::Cell(child.clone());
+                        }
+                    }
+                }
+            }
+
+            _ => {}
         }
     }
 }
