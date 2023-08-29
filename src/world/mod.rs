@@ -72,7 +72,7 @@ impl World {
 
         // Add cell.
         let cell = Cell::new(
-            Vector2::new(128, 25),
+            Vector2::new(128, 30),
             TypeCell::Producer,
             rand::thread_rng().gen_range(0..1_000_000),
         );

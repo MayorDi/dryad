@@ -166,6 +166,45 @@ impl Behaviour for Cell {
         let cell = world.segments[idx_segment].to_cell().unwrap();
         let (x, y): (usize, usize) = cell.get_position().into();
         let idx = idx_segment;
+
+        cell.lifetime += 1;
+        match cell.type_cell {
+            TypeCell::Conductor => {
+                if cell.lifetime > 200 {
+                    world.segments[idx_segment] = Segment::Air(Air::new(Vector2::new(x, y)));
+                    return;
+                }
+            }
+
+            TypeCell::Consumer => {
+                if cell.lifetime > 50 {
+                    world.segments[idx_segment] = Segment::Air(Air::new(Vector2::new(x, y)));
+                    return;
+                }
+            }
+
+            TypeCell::Producer => {
+                if cell.lifetime > 70 {
+                    world.segments[idx_segment] = Segment::Air(Air::new(Vector2::new(x, y)));
+                    return;
+                }
+            }
+
+            TypeCell::Builder => {
+                if cell.lifetime > 40 {
+                    world.segments[idx_segment] = Segment::Air(Air::new(Vector2::new(x, y)));
+                    return;
+                }
+            }
+
+            TypeCell::Photosynthetic => {
+                if cell.lifetime > 30 {
+                    world.segments[idx_segment] = Segment::Air(Air::new(Vector2::new(x, y)));
+                    return;
+                }
+            }
+        }
+
         match cell.type_cell {
             TypeCell::Producer => {
                 let idx_bottom = get_index(x, y - 1, SIZE_WORLD[0]);
@@ -180,6 +219,7 @@ impl Behaviour for Cell {
                     world.segments[idx] = Segment::Air(Air::from(air));
                 } else if let Segment::Dirt(_) = &world_read.segments[idx_bottom] {
                     let mut new_cell = cell.clone();
+                    new_cell.lifetime = 0;
                     new_cell.mutate();
 
                     let gene = cell.genome.0[cell.children[0]];

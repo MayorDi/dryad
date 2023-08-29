@@ -67,5 +67,5 @@ pub mod cell {
 }
 
 pub mod genome {
-    pub const COUNT_GENES: usize = 20;
+    pub const COUNT_GENES: usize = 40;
 }
