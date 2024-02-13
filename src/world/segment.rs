@@ -1,6 +1,7 @@
+use crate::alias::Position;
 use crate::traits::*;
 
-use super::{Air, Block, Cell, VectorWrapper};
+use super::{Air, Block, Cell};
 
 /// `Segment` is the basis for building the world by dividing segments into types.
 #[derive(Debug, Clone, PartialEq)]
@@ -40,12 +41,20 @@ impl ToCell for Segment {
     }
 }
 
-impl Position for Segment {
-    fn get_position(&self) -> VectorWrapper<usize> {
+impl GetPosition for Segment {
+    fn get_position(&self) -> Position {
         match self {
             Segment::Cell(cell) => cell.get_position(),
             Segment::Dirt(block) => block.get_position(),
             Segment::Air(air) => air.get_position(),
+        }
+    }
+
+    fn get_index(&self) -> usize {
+        match self {
+            Segment::Cell(cell) => cell.get_index(),
+            Segment::Dirt(block) => block.get_index(),
+            Segment::Air(air) => air.get_index(),
         }
     }
 }

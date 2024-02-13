@@ -1,12 +1,13 @@
+use macros_helper::GetPosition;
 use nalgebra::Vector2;
 use rand::Rng;
 
+use super::*;
+use crate::alias::Position;
 use crate::traits::{Behaviour, Glucose, Mutation, ToCell};
 
-use super::*;
-
 /// `Cell` is the main working unit in which most of all processes take place.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, GetPosition)]
 pub struct Cell {
     pub id: usize,
     pub lifetime: usize,
@@ -155,16 +156,11 @@ impl Mutation for Cell {
     }
 }
 
-impl Position for Cell {
-    fn get_position(&self) -> VectorWrapper<usize> {
-        VectorWrapper(self.position)
-    }
-}
-
 impl Behaviour for Cell {
     fn update(world_read: &World, world: &mut World, idx_segment: usize) {
         let cell = world.segments[idx_segment].to_cell().unwrap();
-        let (x, y): (usize, usize) = cell.get_position().into();
+        let pos = cell.get_position();
+        let (x, y) = (pos.x, pos.y);
         let idx = idx_segment;
 
         cell.lifetime += 1;
@@ -243,7 +239,7 @@ impl Behaviour for Cell {
                 for (i, segment) in world_read.get_segments_at(n.to_vec()).iter().enumerate() {
                     if let Segment::Air(_) = segment {
                         if let Some(child) = &mut children[i + 1] {
-                            child.position = world.segments[n[i]].get_position().unwrap();
+                            child.position = world.segments[n[i]].get_position();
                             world.segments[n[i]] = Segment::Cell(child.clone());
                         }
                     }

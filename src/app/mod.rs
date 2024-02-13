@@ -6,9 +6,7 @@ pub mod render;
 pub mod sdl;
 pub mod update;
 
-pub use render::*;
 pub use sdl::*;
-pub use update::*;
 
 use sdl2::{event::Event, keyboard::Keycode};
 
@@ -54,7 +52,7 @@ impl App {
                 break 'running;
             }
 
-            ::std::thread::sleep(stop_frame);
+            std::thread::sleep(stop_frame);
         }
 
         log::info!(target: "app_run", "Shutting down the application.");

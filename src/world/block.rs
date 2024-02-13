@@ -1,4 +1,5 @@
-use nalgebra::Vector2;
+use crate::alias::Position;
+use macros_helper::GetPosition;
 
 use crate::traits::{Behaviour, ToBlock};
 
@@ -6,17 +7,11 @@ use super::*;
 
 /// `Block` represents the solid base of the grid, mainly acts as the soil.
 /// It supplies plants with nutrients.
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, GetPosition)]
 pub struct Block {
-    pub position: Vector2<usize>,
+    pub position: Position,
     pub chemical: Chemical,
     pub physical: Physical,
-}
-
-impl Position for Block {
-    fn get_position(&self) -> VectorWrapper<usize> {
-        VectorWrapper(self.position)
-    }
 }
 
 impl Behaviour for Block {

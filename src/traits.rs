@@ -1,3 +1,4 @@
+use crate::alias::Position;
 use crate::{app::SDL, world::*};
 
 /// Turning a `Segment` into a specific type, to simplify the `if let` construction.
@@ -66,19 +67,19 @@ pub trait Render {
 }
 
 /// Provides methods for getting a position in a one-dimensional array.
-pub trait Position {
+pub trait GetPosition {
     /// Gets the `self` position depending on the index.
     ///
     /// ```
     /// use dryad::world::{ Cell, TypeCell, VectorWrapper };
     /// use dryad::constants::world::SIZE_WORLD;
     /// use nalgebra::Vector2;
-    /// use dryad::traits::Position;
+    /// use dryad::traits::GetPosition;
     ///
     /// let cell: Cell = Cell::new(Vector2::new(10, 2), TypeCell::default(), 1);
     /// assert_eq!(VectorWrapper::from((10, 2)), cell.get_position());
     /// ```
-    fn get_position(&self) -> VectorWrapper<usize>;
+    fn get_position(&self) -> Position;
 
     /// Gets the `self` index depending on the position. \
     /// Has a default implementation.
@@ -87,15 +88,12 @@ pub trait Position {
     /// use dryad::world::{ Cell, TypeCell, VectorWrapper };
     /// use dryad::constants::world::SIZE_WORLD;
     /// use nalgebra::Vector2;
-    /// use dryad::traits::Position;
+    /// use dryad::traits::GetPosition;
     ///
     /// let cell: Cell = Cell::new(Vector2::new(10, 2), TypeCell::default(), 1);
     /// assert_eq!(SIZE_WORLD[0] * 2 + 10, cell.get_index());
     /// ```
-    fn get_index(&self) -> usize {
-        let (x, y) = self.get_position().into();
-        get_index(x, y, SIZE_WORLD[0])
-    }
+    fn get_index(&self) -> usize;
 }
 
 /// Provides various methods for implementing mutations.

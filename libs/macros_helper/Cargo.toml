@@ -1,0 +1,13 @@
+[package]
+name = "macros_helper"
+version = "0.1.0"
+edition = "2021"
+authors = ["Dmitriy Mayorov<MayorDi@yandex.ru>"]
+license = "Apache-2.0"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "2.0.48"
+quote = "1.0.35"

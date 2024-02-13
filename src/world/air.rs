@@ -1,10 +1,12 @@
+use macros_helper::GetPosition;
 use nalgebra::Vector2;
 
 use crate::constants::colors::COLOR_SKYBLUE;
 
-use super::{Physical, Position, VectorWrapper};
+use super::{get_index, GetPosition, Physical};
+use crate::{alias::Position, constants::world::SIZE_WORLD};
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, GetPosition)]
 pub struct Air {
     pub position: Vector2<usize>,
     pub physical: Physical,
@@ -19,11 +21,5 @@ impl Air {
                 color: COLOR_SKYBLUE,
             },
         }
-    }
-}
-
-impl Position for Air {
-    fn get_position(&self) -> VectorWrapper<usize> {
-        VectorWrapper(self.position)
     }
 }
