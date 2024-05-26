@@ -14,15 +14,13 @@ pub enum Unit {
 
 #[derive(Debug, Clone)]
 pub struct Water {
-    chemical_composition: Chemistry
+    chemical_composition: Chemistry,
 }
 
 impl Water {
     pub fn new() -> Self {
         Self {
-            chemical_composition: Chemistry {
-                water: 1000.0
-            }
+            chemical_composition: Chemistry { water: 1000.0 },
         }
     }
 }

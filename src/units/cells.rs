@@ -6,5 +6,3 @@ pub enum Cell {
     Builder,
     Producer,
 }
-
-
